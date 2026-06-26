@@ -67,8 +67,8 @@ class ForecastLSTM(nn.Module):
         self.fc   = nn.Linear(hidden_size, pred_steps)
 
     def forward(self, x):
-        _, (h_n, _) = self.lstm(x)          # h_n: [1, batch, hidden]
-        return self.fc(h_n.squeeze(0))       # [batch, pred_steps]
+        _, (h_n, _) = self.lstm(x)
+        return self.fc(h_n.squeeze(0))
 
 
 model     = ForecastLSTM(hidden_size=32, pred_steps=PRED_STEPS)

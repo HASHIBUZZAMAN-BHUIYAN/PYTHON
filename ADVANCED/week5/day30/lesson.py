@@ -185,9 +185,8 @@ N     = 500
 HDIM  = 32
 EPOCH = 30
 
-# Data: sequence of random floats, label = first element
 X_data = torch.randn(N, SEQ, 1)
-y_data = X_data[:, 0, :]   # [N, 1]
+y_data = X_data[:, 0, :]   # label = first element
 
 split  = 400
 X_tr, y_tr = X_data[:split], y_data[:split]
@@ -207,9 +206,8 @@ class MemoryModel(nn.Module):
 
     def forward(self, x):
         out = self.rnn(x)
-        # h_n is different structure for LSTM
         if self.cell_type == "lstm":
-            h_n = out[1][0]   # (h_n, c_n)[0]
+            h_n = out[1][0]   # LSTM returns (h_n, c_n); take h_n
         else:
             h_n = out[1]
         return self.fc(h_n.squeeze(0))

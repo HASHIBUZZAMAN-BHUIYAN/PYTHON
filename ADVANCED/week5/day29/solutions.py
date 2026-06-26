@@ -36,7 +36,6 @@ b     = np.zeros(hidden_size)
 x_t    = np.random.randn(input_size)
 h_prev = np.zeros(hidden_size)
 
-# RNN step: h_t = tanh(W_xh @ x_t + W_hh @ h_prev + b)
 h_t = np.tanh(W_xh @ x_t + W_hh @ h_prev + b)
 print(f"  h_t shape:  {h_t.shape}")
 print(f"  h_t values: {np.round(h_t, 4)}")
@@ -55,11 +54,9 @@ class SumPredictor(nn.Module):
         self.fc  = nn.Linear(8, 1)
 
     def forward(self, x):
-        # x: [batch, seq_len, 1]
         _, h_n = self.rnn(x)           # h_n: [1, batch, 8]
         return self.fc(h_n.squeeze(0)) # [batch, 1]
 
-# Synthetic data: 50 sequences of length 10
 n_samples = 50
 seq_len   = 10
 X = torch.randn(n_samples, seq_len, 1)
@@ -89,13 +86,11 @@ torch.manual_seed(42)
 model4    = SumPredictor()
 optimizer4 = torch.optim.Adam(model4.parameters(), lr=0.01)
 
-# one forward + backward pass
 pred  = model4(X)
 loss  = nn.MSELoss()(pred, y)
 optimizer4.zero_grad()
 loss.backward()
 
-# compute gradient norm BEFORE clipping
 total_norm_before = sum(
     p.grad.norm() ** 2 for p in model4.parameters() if p.grad is not None
 ) ** 0.5
@@ -104,7 +99,6 @@ print(f"  Gradient norm BEFORE clipping: {total_norm_before.item():.4f}")
 # clip gradients
 torch.nn.utils.clip_grad_norm_(model4.parameters(), max_norm=1.0)
 
-# compute gradient norm AFTER clipping
 total_norm_after = sum(
     p.grad.norm() ** 2 for p in model4.parameters() if p.grad is not None
 ) ** 0.5

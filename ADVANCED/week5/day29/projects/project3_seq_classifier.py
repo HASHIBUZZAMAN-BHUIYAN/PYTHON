@@ -78,9 +78,8 @@ class SeqClassifier(nn.Module):
         self.fc  = nn.Linear(hidden_size, n_classes)
 
     def forward(self, x):
-        # x: [batch, seq_len, 1]
-        _, h_n = self.rnn(x)                 # h_n: [1, batch, hidden]
-        return self.fc(h_n.squeeze(0))       # [batch, 2]
+        _, h_n = self.rnn(x)
+        return self.fc(h_n.squeeze(0))
 
 model     = SeqClassifier(hidden_size=16)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
@@ -114,7 +113,6 @@ for epoch in range(1, EPOCHS + 1):
         n_batches  += 1
 
     if epoch % 5 == 0 or epoch == 1:
-        # train acc
         model.eval()
         with torch.no_grad():
             preds_tr  = model(X_train).argmax(dim=1)

@@ -34,12 +34,8 @@ print(f"Text length: {len(TEXT)} characters\n")
 encoded = [ch2ix[c] for c in TEXT]
 
 # Build (input, target) pairs: every consecutive pair of characters
-inputs  = torch.tensor(encoded[:-1], dtype=torch.long)  # [N]
-targets = torch.tensor(encoded[1:],  dtype=torch.long)  # [N]
-
-# Reshape: [seq_len, 1] (one batch, rolling window approach — one char at a time)
-# We'll use the whole sequence as one batch of length N
-# x: [N, 1, 1]  (batch=1, seq=1 per step — simple online approach)
+inputs  = torch.tensor(encoded[:-1], dtype=torch.long)
+targets = torch.tensor(encoded[1:],  dtype=torch.long)
 
 # ── Model ─────────────────────────────────────────────────────────────────────
 class CharRNN(nn.Module):
@@ -51,10 +47,9 @@ class CharRNN(nn.Module):
         self.fc     = nn.Linear(hidden_size, vocab_size)
 
     def forward(self, x, h):
-        # x: [batch, seq_len]  int indices
-        emb    = self.embed(x)               # [batch, seq_len, hidden]
-        out, h = self.rnn(emb, h)            # out: [batch, seq_len, hidden]
-        logits = self.fc(out)                # [batch, seq_len, vocab]
+        emb    = self.embed(x)
+        out, h = self.rnn(emb, h)
+        logits = self.fc(out)
         return logits, h
 
     def init_hidden(self, batch_size=1):
@@ -88,9 +83,7 @@ for epoch in range(1, EPOCHS + 1):
         chunk_tgt = torch.tensor(encoded[i+1 : i+SEQ_CHUNK+1], dtype=torch.long).unsqueeze(0) # [1, 40]
 
         h = h.detach()   # truncated BPTT — detach from previous chunk
-        logits, h = model(chunk_in, h)    # logits: [1, 40, vocab]
-
-        # reshape for CrossEntropyLoss: [batch*seq, vocab] vs [batch*seq]
+        logits, h = model(chunk_in, h)
         loss = criterion(logits.view(-1, vocab), chunk_tgt.view(-1))
         optimizer.zero_grad()
         loss.backward()

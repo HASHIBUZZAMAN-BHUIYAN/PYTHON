@@ -66,9 +66,9 @@ class CharLSTM(nn.Module):
         self.fc    = nn.Linear(hidden_size, vocab_size)
 
     def forward(self, x, state=None):
-        emb        = self.embed(x)         # [batch, seq, embed]
-        out, state = self.lstm(emb, state) # out: [batch, seq, hidden]
-        logits     = self.fc(out)          # [batch, seq, vocab]
+        emb        = self.embed(x)
+        out, state = self.lstm(emb, state)
+        logits     = self.fc(out)
         return logits, state
 
     def init_state(self, batch_size=1):
@@ -102,8 +102,7 @@ for epoch in range(1, EPOCHS + 1):
         xb  = X_train[idx]              # [batch, seq_len]
         yb  = y_train[idx]              # [batch, seq_len]
 
-        logits, _ = model(xb)           # [batch, seq_len, vocab]
-        # reshape for loss: [batch*seq, vocab] vs [batch*seq]
+        logits, _ = model(xb)
         loss = criterion(logits.view(-1, vocab), yb.view(-1))
 
         optimizer.zero_grad()

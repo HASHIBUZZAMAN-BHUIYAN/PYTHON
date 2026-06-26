@@ -70,11 +70,8 @@ class VanillaRNN:
 
         for t, x in enumerate(inputs):
             xs[t] = x
-            # hidden state
             hs[t] = np.tanh(self.W_xh @ x + self.W_hh @ hs[t-1] + self.b_h)
-            # output (logits)
             ys[t] = self.W_hy @ hs[t] + self.b_y
-            # softmax
             e = np.exp(ys[t] - np.max(ys[t]))
             ps[t] = e / e.sum()
 
@@ -97,27 +94,23 @@ class VanillaRNN:
         grad_norms = []  # track gradient magnitude per timestep
 
         for t in reversed(range(T)):
-            # cross-entropy loss
             loss -= np.log(ps[t][targets[t], 0] + 1e-9)
-            # output gradient
             dy = np.copy(ps[t])
             dy[targets[t]] -= 1
             dW_hy += dy @ hs[t].T
             db_y  += dy
             # hidden gradient
             dh = self.W_hy.T @ dy + dh_next
-            dh_raw = (1 - hs[t] ** 2) * dh   # tanh derivative
+            dh_raw = (1 - hs[t] ** 2) * dh   # tanh' = 1 - tanh²
             db_h  += dh_raw
             dW_xh += dh_raw @ xs[t].T
             dW_hh += dh_raw @ hs[t-1].T
             dh_next = self.W_hh.T @ dh_raw
             grad_norms.append(float(np.linalg.norm(dh_next)))
 
-        # clip gradients to prevent explosion
         for param in [dW_xh, dW_hh, dW_hy, db_h, db_y]:
             np.clip(param, -5, 5, out=param)
 
-        # update
         self.W_xh -= self.lr * dW_xh
         self.W_hh -= self.lr * dW_hh
         self.W_hy -= self.lr * dW_hy
@@ -171,7 +164,6 @@ Usage:
   h_n    : [num_layers, batch, hidden_size]  — final hidden state
 """)
 
-# Simple PyTorch RNN demo
 torch.manual_seed(42)
 input_size  = 4
 hidden_size = 8
@@ -237,7 +229,6 @@ for step in range(50):
         out.retain_grad()
 
     if step == 49:
-        # do one more backward pass keeping intermediate grads
         out2, _ = model.rnn(x_data)
         out2.retain_grad()
         pred2 = model.fc(out2[:, -1, :])

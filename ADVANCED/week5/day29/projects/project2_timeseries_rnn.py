@@ -42,7 +42,6 @@ def make_sequences(data, seq_len):
     return np.array(X, dtype=np.float32), np.array(y, dtype=np.float32)
 
 X_all, y_all = make_sequences(signal_norm, SEQ_LEN)
-# X_all: [N-SEQ_LEN, SEQ_LEN]  y_all: [N-SEQ_LEN]
 
 split    = int(0.8 * len(X_all))
 X_train  = torch.tensor(X_all[:split]).unsqueeze(-1)   # [split, seq_len, 1]
@@ -61,9 +60,8 @@ class TimeSeriesRNN(nn.Module):
         self.fc  = nn.Linear(hidden_size, 1)
 
     def forward(self, x):
-        # x: [batch, seq_len, 1]
-        _, h_n = self.rnn(x)        # h_n: [1, batch, hidden]
-        return self.fc(h_n.squeeze(0))  # [batch, 1]
+        _, h_n = self.rnn(x)
+        return self.fc(h_n.squeeze(0))
 
 torch.manual_seed(42)
 model     = TimeSeriesRNN(hidden_size=16)
