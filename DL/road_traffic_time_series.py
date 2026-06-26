@@ -146,7 +146,6 @@ with torch.no_grad():
     preds_norm = model(X_te_t).squeeze().numpy()
     actuals_norm = y_te_t.squeeze().numpy()
 
-# Denormalise
 preds   = preds_norm   * std_ + mean_
 actuals = actuals_norm * std_ + mean_
 

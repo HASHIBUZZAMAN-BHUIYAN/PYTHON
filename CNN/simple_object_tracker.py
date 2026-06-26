@@ -82,7 +82,6 @@ def make_sequence(n_frames=N_FRAMES):
                               (cx + SHAPE_R, cy + SHAPE_R), col, -1)
             boxes.append((cx - SHAPE_R, cy - SHAPE_R,
                           cx + SHAPE_R, cy + SHAPE_R))
-            # Update position with velocity + jitter
             pos[i] += vel[i] + rng.normal(0, 1.5, 2)
 
         frames.append((frame, boxes))

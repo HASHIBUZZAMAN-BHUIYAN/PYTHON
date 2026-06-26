@@ -160,7 +160,6 @@ def build_dataset(n_per_class=80):
     for cls_idx, gen_fn in enumerate(GENERATORS):
         for _ in range(n_per_class):
             _, kpts = gen_fn(jitter=True)
-            # Feature vector: flatten (cx/SIZE, cy/SIZE) for each of 8 joints
             feat = []
             for kp in kpts:
                 feat.extend([kp[0] / SIZE, kp[1] / SIZE])

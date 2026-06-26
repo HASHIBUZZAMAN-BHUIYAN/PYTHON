@@ -158,12 +158,10 @@ if WEBCAM:
         joy_y = (blob_xy[1] - cy) / cy
         update_robot(np.array([joy_x, joy_y]))
 
-        # Draw robot on frame
         rpx, rpy = robot_to_px(robot_pos)
         cv.circle(frame, (rpx, rpy), 18, (255, 80, 0), -1)
         cv.circle(frame, (rpx, rpy), 18, (255, 255, 255), 2)
 
-        # Draw path
         if len(robot_path) > 1:
             for k in range(max(0, len(robot_path)-30), len(robot_path)-1):
                 pa = robot_to_px(robot_path[k])

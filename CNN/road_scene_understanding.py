@@ -130,7 +130,6 @@ def build_dataset(n, rng):
                 labels.append(label)
     images = np.array(images, dtype=np.float32)[:, np.newaxis, :, :]  # (N,1,H,W)
     labels = np.array(labels, dtype=np.int64)
-    # Shuffle
     idx = rng.permutation(len(images))
     return images[idx], labels[idx]
 
