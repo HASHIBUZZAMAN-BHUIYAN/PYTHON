@@ -111,10 +111,7 @@ def run_lda(texts: list[str], n_topics: int):
     )
     doc_topic = lda.fit_transform(X_counts)   # shape: (n_docs, n_topics)
 
-    # Top keywords per topic
     topic_words = [top_n_words(features, comp, n=6) for comp in lda.components_]
-
-    # Dominant topic per document
     doc_assignments = np.argmax(doc_topic, axis=1)
 
     return topic_words, doc_assignments, doc_topic
@@ -133,7 +130,6 @@ def run_tfidf_keywords(texts: list[str], n_topics: int):
     X_tfidf   = tfidf_vec.fit_transform(texts)
     features  = tfidf_vec.get_feature_names_out()
 
-    # Top-3 keywords per doc
     doc_top_kws = []
     for i in range(X_tfidf.shape[0]):
         row   = X_tfidf[i].toarray().flatten()
@@ -157,7 +153,6 @@ def run_tfidf_keywords(texts: list[str], n_topics: int):
         for kw in kws:
             kw_to_cluster.setdefault(kw, found)
 
-    # Collect top words per cluster
     cluster_words = defaultdict(list)
     for i, cid in enumerate(assignments):
         cluster_words[cid].extend(doc_top_kws[i])
@@ -165,7 +160,6 @@ def run_tfidf_keywords(texts: list[str], n_topics: int):
     topic_words = []
     seen_clusters = sorted(set(assignments))
     for cid in seen_clusters:
-        # Deduplicate and take top-6 by frequency
         freq = defaultdict(int)
         for w in cluster_words[cid]:
             freq[w] += 1

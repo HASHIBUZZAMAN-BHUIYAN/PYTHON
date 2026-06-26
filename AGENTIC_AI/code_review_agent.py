@@ -233,7 +233,6 @@ class CodeReviewAgent:
         issues = []
         for rule_fn in RULES:
             issues.extend(rule_fn(lines, code))
-        # Sort: errors first, then warnings, then style
         severity_order = {"error": 0, "warning": 1, "style": 2}
         issues.sort(key=lambda i: (severity_order[i.severity], i.line))
         return issues
@@ -245,7 +244,6 @@ class CodeReviewAgent:
         print("=" * 65)
         print(f"  SNIPPET: {snippet_name}")
         print("  " + "-" * 61)
-        # Print code with line numbers
         for n, line in enumerate(code.strip().split("\n"), 1):
             marker = " "
             if any(i.line == n for i in issues):

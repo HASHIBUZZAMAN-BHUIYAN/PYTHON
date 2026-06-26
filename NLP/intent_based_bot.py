@@ -155,7 +155,6 @@ class IntentBot:
         labels, texts = zip(*TRAINING_DATA)  # TRAINING_DATA is (intent, utterance)
         self.classes  = sorted(set(labels))
 
-        # TF-IDF vectorizer with unigrams+bigrams, then logistic regression
         self.pipeline = Pipeline([
             ("tfidf", TfidfVectorizer(ngram_range=(1, 2), max_features=500,
                                        lowercase=True, sublinear_tf=True)),
@@ -223,11 +222,8 @@ if __name__ == "__main__":
 
     for msg in TEST_MESSAGES:
         result = bot.respond(msg)
-        # Confidence bar
         bar_len = int(result["score"] * 20)
         bar     = "#" * bar_len + "." * (20 - bar_len)
-
-        # Sort intents by score for display
         ranked  = sorted(result["all"].items(), key=lambda x: -x[1])
         top2    = " | ".join(f"{k}: {v:.2f}" for k, v in ranked[:3])
 

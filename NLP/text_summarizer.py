@@ -67,7 +67,6 @@ def extractive_summary(text, n_sentences=3):
     # IDF: log(N / df)
     idf = {w: math.log(doc_count / (df + 1)) for w, df in word_in_sent.items()}
 
-    # Score each sentence
     scores = []
     for s in sents:
         words  = [w for w in tokenize(s) if w not in STOPWORDS]

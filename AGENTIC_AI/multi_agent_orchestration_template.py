@@ -129,9 +129,7 @@ class NegotiationOrchestrator:
         seller_offer = self.seller_min * 1.5
         if verbose: print(f"  Buyer max={self.buyer_min}  Seller min={self.seller_min}")
         for round_n in range(1, max_rounds+1):
-            # Buyer moves up
             buyer_offer  = min(buyer_offer  * 1.08, self.buyer_min)
-            # Seller moves down
             seller_offer = max(seller_offer * 0.92, self.seller_min)
             if verbose:
                 print(f"  Round {round_n}: Buyer={buyer_offer:.1f}  Seller={seller_offer:.1f}")

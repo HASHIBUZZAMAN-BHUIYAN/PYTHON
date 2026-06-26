@@ -145,7 +145,6 @@ class NegotiationOrchestrator:
             seller_offer = self.seller.offer(rnd, self.max_rounds)
             gap          = seller_offer - buyer_offer
 
-            # Check for deal
             if buyer_offer >= seller_offer:
                 deal_price = (buyer_offer + seller_offer) / 2
                 if verbose:
@@ -157,7 +156,6 @@ class NegotiationOrchestrator:
                           f"Seller got ${deal_price - self.seller.opening:+,.0f} vs opening.")
                 return NegotiationResult(True, deal_price, rnd, "Offers converged")
 
-            # Check walk-away
             buyer_stuck  = self.buyer.at_limit(buyer_offer)
             seller_stuck = self.seller.at_limit(seller_offer)
 
