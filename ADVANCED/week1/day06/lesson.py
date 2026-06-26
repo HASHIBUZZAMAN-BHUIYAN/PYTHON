@@ -94,12 +94,10 @@ print(f"Test accuracy: {accuracy_score(y_test, gs.predict(X_test)):.4f}")
 # ─── 7. VISUALISE ────────────────────────────────────────────────────────────
 fig, axes = plt.subplots(1, 2, figsize=(13, 5))
 
-# Plot decision tree (only first 2 levels for readability)
 plot_tree(dt, max_depth=2, feature_names=wine.feature_names,
           class_names=wine.target_names, filled=True, rounded=True, ax=axes[0])
 axes[0].set_title("Decision Tree (depth ≤ 2)")
 
-# Model comparison bar chart
 names = list(comparison.keys())
 accs  = list(comparison.values())
 bars  = axes[1].barh(names, accs, color="steelblue", edgecolor="white")

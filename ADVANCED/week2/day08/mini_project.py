@@ -9,7 +9,6 @@ from sklearn.preprocessing import StandardScaler
 
 np.random.seed(42)
 
-# Use digits 0 vs 1 (binary classification, keeps it simple)
 digits = load_digits()
 mask = digits.target < 2
 X, y = digits.data[mask], digits.target[mask]
@@ -86,7 +85,6 @@ fig, axes = plt.subplots(1, 2, figsize=(11, 4))
 axes[0].plot(net.losses, color="steelblue")
 axes[0].set_title("Training Loss"); axes[0].set_xlabel("Epoch")
 
-# Show some predictions
 incorrect_idx = np.where(net.predict(X_test) != y_test)[0]
 fig2, axs = plt.subplots(2, 5, figsize=(10, 4))
 fig2.suptitle(f"Sample predictions (test acc={test_acc:.3f})")

@@ -19,7 +19,6 @@ os.makedirs("ML/outputs", exist_ok=True)
 
 np.random.seed(42)
 
-# --- Generate 2 years of daily synthetic sales data ---
 n_days = 365 * 2   # 730 days
 t      = np.arange(n_days)
 
@@ -33,7 +32,6 @@ sales = np.clip(sales, 50, None)               # no negative sales
 
 print(f"Sales series: {n_days} days  |  mean={sales.mean():.1f}  std={sales.std():.1f}")
 
-# --- Train / Test split (80% / 20%) ---
 split     = int(n_days * 0.8)
 y_train   = sales[:split]
 y_test    = sales[split:]
@@ -41,15 +39,11 @@ n_test    = len(y_test)
 print(f"Train: {split} days  |  Test: {n_test} days")
 
 
-# ------- Forecasting methods -------
-
 # 1. Naive: last known value repeated
 naive_forecast = np.full(n_test, y_train[-1])
 
-# 2. Moving Average (window=7)
+# 2. Moving Average (window=7) — recursive one-step-ahead
 window = 7
-ma_forecast = np.full(n_test, np.mean(y_train[-window:]))
-# Recursive one-step-ahead
 buffer = list(y_train[-window:])
 ma_preds = []
 for i in range(n_test):
@@ -66,24 +60,19 @@ for val in y_train[1:]:
 es_forecast = np.full(n_test, es_level)
 
 # 4. Decomposition + Linear Trend extrapolation
-#    a) Estimate trend via polyfit on full training series
 trend_coefs = np.polyfit(np.arange(split), y_train, deg=1)
 trend_line  = np.polyval(trend_coefs, np.arange(split + n_test))
-#    b) Detrend training series
 detrended_train = y_train - trend_line[:split]
-#    c) Extract weekly seasonality (mean of each weekday over detrended)
 season_len = 7
 season_pattern = np.array([
     np.mean(detrended_train[i::season_len]) for i in range(season_len)
 ])
-#    d) Forecast = trend + seasonal pattern
 dec_forecast = np.array([
     trend_line[split + i] + season_pattern[(split + i) % season_len]
     for i in range(n_test)
 ])
 
 
-# ------- Metrics -------
 def mae_rmse(actual, pred):
     err  = actual - pred
     mae  = np.mean(np.abs(err))
@@ -106,10 +95,8 @@ for name, pred in forecasts.items():
     print(f"{name:<22} {mae:>8.2f} {rmse:>9.2f}")
 print("-" * 50)
 
-# ------- Plot -------
 fig, ax = plt.subplots(figsize=(14, 5))
 
-# Show last 60 days of training + all test
 show_train = 60
 x_train_show = np.arange(split - show_train, split)
 x_test       = np.arange(split, split + n_test)

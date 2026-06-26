@@ -66,21 +66,18 @@ best_pred = results[best_name]["y_pred"]
 
 fig, axes = plt.subplots(1, 3, figsize=(14, 4))
 
-# Actual vs predicted
 axes[0].scatter(y_test, best_pred, alpha=0.5, s=20)
 lims = [min(y_test.min(), best_pred.min()), max(y_test.max(), best_pred.max())]
 axes[0].plot(lims, lims, "r--", linewidth=1.5)
 axes[0].set_xlabel("Actual"); axes[0].set_ylabel("Predicted")
 axes[0].set_title(f"{best_name}: Actual vs Predicted")
 
-# Residuals
 residuals = y_test - best_pred
 axes[1].scatter(best_pred, residuals, alpha=0.5, s=20)
 axes[1].axhline(0, color="r", linestyle="--")
 axes[1].set_xlabel("Predicted"); axes[1].set_ylabel("Residual")
 axes[1].set_title("Residual Plot")
 
-# Model comparison (RMSE)
 names = list(results.keys()); rmses = [results[n]["rmse"] for n in names]
 bars = axes[2].barh(names, rmses, color="steelblue")
 axes[2].set_xlabel("RMSE"); axes[2].set_title("Model Comparison (lower=better)")

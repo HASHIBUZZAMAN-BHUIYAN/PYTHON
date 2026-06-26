@@ -184,7 +184,6 @@ for ep in range(N_EPISODES):
 
 print(f"  Training done. Last 100 eps avg reward = {np.mean(rewards_per_ep[-100:]):.1f}")
 
-# Extract greedy policy path
 def greedy_path(Q, start, goal, max_steps=200):
     r, c = start
     path = [(r, c)]
@@ -213,7 +212,6 @@ fig2, axes2 = plt.subplots(1, 2, figsize=(11, 5))
 plot_grid(axes2[0], GRID, ql_path,
           f"Q-Learning greedy path ({'goal!' if found else 'partial'})")
 
-# Smoothed reward curve
 window = 50
 smoothed = np.convolve(rewards_per_ep, np.ones(window)/window, mode="valid")
 axes2[1].plot(smoothed, color="purple")

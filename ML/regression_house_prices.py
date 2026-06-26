@@ -21,7 +21,6 @@ import matplotlib.pyplot as plt
 
 os.makedirs("ML/outputs", exist_ok=True)
 
-# --- Generate synthetic housing data ---
 np.random.seed(42)
 n = 1000
 size_sqft   = np.random.uniform(500, 3000, n)
@@ -48,7 +47,6 @@ X = df.drop("price", axis=1)
 y = df["price"]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# --- Models ---
 models = {
     "LinearRegression": LinearRegression(),
     "Ridge(alpha=10)":  Ridge(alpha=10),
@@ -64,7 +62,6 @@ for name, model in models.items():
     r2   = r2_score(y_test, preds)
     results[name] = {"MAE": mae, "RMSE": rmse, "R2": r2, "preds": preds}
 
-# --- Print comparison table ---
 print("House Price Regression - Model Comparison")
 print("-" * 60)
 header = f"{'Model':<22} {'MAE':>10} {'RMSE':>12} {'R2':>8}"
@@ -79,7 +76,6 @@ for name, m in results.items():
 print("-" * 60)
 print(f"Best model: {best_name} (R2={best_r2:.4f})")
 
-# --- Plot: actual vs predicted for best model ---
 best_preds = results[best_name]["preds"]
 
 fig, ax = plt.subplots(figsize=(7, 6))

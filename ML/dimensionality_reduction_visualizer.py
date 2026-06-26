@@ -20,13 +20,11 @@ import matplotlib.pyplot as plt
 
 os.makedirs("ML/outputs", exist_ok=True)
 
-# --- Load digits dataset (no download) ---
 digits = load_digits()
 X = digits.data          # (1797, 64)
 y = digits.target        # 0-9
 print(f"Dataset shape: {X.shape}, classes: {np.unique(y)}")
 
-# --- PCA to 50D ---
 t0 = time.time()
 pca50 = PCA(n_components=50, random_state=42)
 X_pca50 = pca50.fit_transform(X)
@@ -34,7 +32,6 @@ ev_50 = pca50.explained_variance_ratio_.sum()
 pca_50d_time = time.time() - t0
 print(f"\nPCA 50D - explained variance: {ev_50:.2%} (took {pca_50d_time:.2f}s)")
 
-# --- PCA to 2D (directly from raw) ---
 t0 = time.time()
 pca2 = PCA(n_components=2, random_state=42)
 X_pca2 = pca2.fit_transform(X)
@@ -49,7 +46,6 @@ for thresh in [0.80, 0.90, 0.95]:
     n_needed = np.searchsorted(cum_ev, thresh) + 1
     print(f"  Components needed for {thresh:.0%} variance: {n_needed}")
 
-# --- t-SNE on the 50-PCA-reduced data (faster than raw 64D) ---
 print("\nRunning t-SNE on PCA-50D data (this may take ~20s)...")
 t0 = time.time()
 tsne = TSNE(n_components=2, perplexity=30, max_iter=1000,
@@ -58,14 +54,12 @@ X_tsne = tsne.fit_transform(X_pca50)
 tsne_time = time.time() - t0
 print(f"t-SNE 2D done (took {tsne_time:.2f}s)")
 
-# --- Runtime comparison ---
 print("\nRuntime Comparison")
 print("-" * 40)
 print(f"  PCA  50D:  {pca_50d_time:.3f}s")
 print(f"  PCA   2D:  {pca_2d_time:.3f}s")
 print(f"  t-SNE 2D:  {tsne_time:.3f}s")
 
-# --- Plot side-by-side ---
 fig, axes = plt.subplots(1, 2, figsize=(14, 6))
 palette = plt.cm.tab10.colors
 

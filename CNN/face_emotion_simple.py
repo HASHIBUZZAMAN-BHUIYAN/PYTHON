@@ -30,7 +30,6 @@ import math
 import numpy as np
 import cv2
 
-# PIL/Pillow for drawing smooth arcs
 from PIL import Image, ImageDraw
 
 import matplotlib
@@ -68,7 +67,6 @@ def draw_face(label, rng):
     img = Image.new("L", (IMG_SIZE, IMG_SIZE), color=30)   # dark background
     draw = ImageDraw.Draw(img)
 
-    # --- Head (circle) ---
     cx, cy = IMG_SIZE // 2, IMG_SIZE // 2
     r_head = 24
     draw.ellipse(
@@ -76,7 +74,6 @@ def draw_face(label, rng):
         fill=180, outline=220
     )
 
-    # --- Eyes (two small filled circles) ---
     eye_y  = cy - 8
     eye_dx = 9
     r_eye  = 3
@@ -85,8 +82,6 @@ def draw_face(label, rng):
     draw.ellipse([cx + eye_dx - r_eye, eye_y - r_eye,
                   cx + eye_dx + r_eye, eye_y + r_eye], fill=30)
 
-    # --- Mouth (arc) ---
-    # Bounding box for the arc
     mouth_l = cx - 10
     mouth_r = cx + 10
     mouth_top = cy + 5
@@ -101,7 +96,6 @@ def draw_face(label, rng):
 
     arr = np.array(img, dtype=np.float32) / 255.0
 
-    # Add tiny gaussian noise for variety
     noise_level = rng.uniform(0.0, 0.04)
     arr = np.clip(arr + rng.standard_normal(arr.shape).astype(np.float32) * noise_level,
                   0.0, 1.0)
@@ -136,14 +130,11 @@ def demo_haar_cascade():
 
     cascade = cv2.CascadeClassifier(cascade_path)
 
-    # Generate a slightly larger synthetic face for detection
     img_pil = Image.new("L", (96, 96), color=30)
     draw = ImageDraw.Draw(img_pil)
     draw.ellipse([16, 12, 80, 76], fill=180, outline=220)
-    # Eyes
     draw.ellipse([31, 29, 37, 35], fill=40)
     draw.ellipse([59, 29, 65, 35], fill=40)
-    # Mouth (happy)
     draw.arc([35, 48, 61, 64], start=0, end=180, fill=60, width=2)
     img_np = np.array(img_pil, dtype=np.uint8)
 

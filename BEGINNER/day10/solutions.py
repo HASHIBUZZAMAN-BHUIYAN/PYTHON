@@ -8,9 +8,6 @@ def get_int(prompt):
         except ValueError:
             print("Please enter a whole number.")
 
-# n = get_int("Enter an integer: ")
-# print(n)
-
 # Exercise 2
 def safe_read(filepath):
     try:

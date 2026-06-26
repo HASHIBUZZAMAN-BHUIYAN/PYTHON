@@ -9,7 +9,7 @@ def count_lines(filepath):
 # Create test file
 with open("test_lines.txt", "w") as f:
     f.write("hello\n\nworld\n\ngoodbye\n")
-print(count_lines("test_lines.txt"))   # 3
+print(count_lines("test_lines.txt"))
 os.remove("test_lines.txt")
 
 # Exercise 2

@@ -21,7 +21,6 @@ class PIDController:
         self.prev_error = error
         raw     = P + self.Ki * self.integral + D
         output  = np.clip(raw, self.out_min, self.out_max)
-        # Integrate only when not saturated (anti-windup)
         if self.anti_windup and output != raw:
             pass
         else:
@@ -90,7 +89,6 @@ class PID2D:
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 
-    # 1D PID — mass-spring-damper
     pid = PIDController(Kp=8., Ki=5., Kd=3., setpoint=1., dt=0.01,
                         out_min=-50., out_max=50.)
     x=xdot=0.; xs=[]
@@ -105,7 +103,6 @@ if __name__ == "__main__":
     plt.tight_layout(); plt.savefig("pid_demo.png",dpi=80); plt.close()
     print(f"1D PID final={xs[-1]:.4f}  Saved pid_demo.png")
 
-    # Cascade PID
     casc = CascadePID((2.,0.5,0.1),(5.,1.,0.2), dt=0.01, pos_setpoint=1.)
     pos=vel=0.; ps=[]
     for _ in range(800):

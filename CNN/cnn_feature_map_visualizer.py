@@ -91,7 +91,6 @@ def make_sample_image():
     """Generate one synthetic 64x64 'abnormal' image with a bright Gaussian blob."""
     rng = np.random.default_rng(SEED)
     base = np.full((IMG_SIZE, IMG_SIZE), 0.45, dtype=np.float32)
-    # Blob at center-ish
     cx, cy = 36, 30
     sigma = 8.0
     x = np.arange(IMG_SIZE)
@@ -118,7 +117,6 @@ def register_hooks(model):
 
     def make_hook(name):
         def hook_fn(module, input, output):
-            # output shape: (batch, channels, H, W)
             feature_maps[name] = output.detach().cpu()
         return hook_fn
 
@@ -146,14 +144,12 @@ def save_feature_maps(feature_maps, input_img, output_path):
     n_layers    = len(layer_names)
     n_channels  = 8   # show first 8 channels per layer
 
-    # Layout: (n_layers + 1) rows, n_channels cols
     n_rows = n_layers + 1
     n_cols = n_channels
 
     fig, axes = plt.subplots(n_rows, n_cols, figsize=(n_cols * 1.5, n_rows * 1.8))
     fig.suptitle("CNN Feature Map Visualization", fontsize=12, y=1.01)
 
-    # Row 0: show input image in first column, blank rest
     axes[0, 0].imshow(input_img, cmap="gray", vmin=0, vmax=1)
     axes[0, 0].set_title("Input", fontsize=8)
     axes[0, 0].axis("off")
@@ -200,13 +196,10 @@ def main():
     print("\nRegistering forward hooks on Conv2d layers:")
     feature_maps, handles = register_hooks(model)
 
-    # Generate sample input
     print("\nGenerating synthetic input image ...")
     sample_np = make_sample_image()
-    # Shape (1, 1, H, W) for batch of 1
     x = torch.tensor(sample_np[np.newaxis, np.newaxis, :, :])
 
-    # Forward pass - hooks fire automatically
     print("Running forward pass ...")
     with torch.no_grad():
         logits = model(x)
@@ -215,7 +208,6 @@ def main():
     print(f"Model prediction: {class_names[pred_class]} "
           f"(logits: {logits[0].numpy().round(3).tolist()})")
 
-    # Remove hooks after use
     for h in handles:
         h.remove()
 

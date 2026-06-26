@@ -36,26 +36,23 @@ class TwoLayerNet:
 
     def forward(self, X):
         self.X   = X
-        self.Z1  = X @ self.W1 + self.b1         # pre-activation hidden
-        self.A1  = sigmoid(self.Z1)               # hidden activations
-        self.Z2  = self.A1 @ self.W2 + self.b2   # pre-activation output
-        self.A2  = sigmoid(self.Z2)               # output (predictions)
+        self.Z1  = X @ self.W1 + self.b1
+        self.A1  = sigmoid(self.Z1)
+        self.Z2  = self.A1 @ self.W2 + self.b2
+        self.A2  = sigmoid(self.Z2)
         return self.A2
 
     def backward(self, y):
         m = y.shape[0]
-        # Output layer gradients
         dZ2 = self.A2 - y.reshape(-1, 1)          # BCE derivative shortcut
         dW2 = self.A1.T @ dZ2 / m
         db2 = dZ2.mean(axis=0, keepdims=True)
 
-        # Hidden layer gradients
         dA1 = dZ2 @ self.W2.T
         dZ1 = dA1 * sigmoid_d(self.Z1)
         dW1 = self.X.T @ dZ1 / m
         db1 = dZ1.mean(axis=0, keepdims=True)
 
-        # Update weights
         self.W2 -= self.lr * dW2
         self.b2 -= self.lr * db2
         self.W1 -= self.lr * dW1
@@ -103,7 +100,6 @@ axes[0].set_title("XOR Training Loss"); axes[0].set_xlabel("Epoch"); axes[0].set
 axes[1].plot(net2.loss_history, color="tomato")
 axes[1].set_title("Circles Training Loss")
 
-# Decision boundary for circles
 h = 0.05
 x_min, x_max = X_c[:,0].min()-0.5, X_c[:,0].max()+0.5
 y_min, y_max = X_c[:,1].min()-0.5, X_c[:,1].max()+0.5

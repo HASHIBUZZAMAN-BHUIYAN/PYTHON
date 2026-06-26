@@ -48,14 +48,10 @@ IMG_W = 128
 def make_road_image_straight():
     """Straight road with two white lane lines."""
     img = np.zeros((IMG_H, IMG_W, 3), dtype=np.uint8)
-    # Sky
     img[:60, :] = [100, 130, 160]
-    # Road (gray)
     img[60:, :] = [70, 70, 70]
-    # Left lane line (white, ~1/3 from left)
     for y in range(60, IMG_H, 10):
         img[y:y+5, 35:38] = [255, 255, 255]
-    # Right lane line (white, ~2/3 from left)
     for y in range(60, IMG_H, 10):
         img[y:y+5, 90:93] = [255, 255, 255]
     return img
@@ -66,11 +62,9 @@ def make_road_image_diagonal():
     img = np.zeros((IMG_H, IMG_W, 3), dtype=np.uint8)
     img[:55, :] = [110, 140, 170]
     img[55:, :] = [65, 65, 65]
-    # Left lane line - angled
     pt1_l = (30, IMG_H)
     pt2_l = (55, 55)
     cv2.line(img, pt1_l, pt2_l, (255, 255, 255), 2)
-    # Right lane line - angled
     pt1_r = (100, IMG_H)
     pt2_r = (73, 55)
     cv2.line(img, pt1_r, pt2_r, (255, 255, 255), 2)
@@ -83,13 +77,10 @@ def make_road_image_noisy():
     img = np.zeros((IMG_H, IMG_W, 3), dtype=np.uint8)
     img[:60, :] = [90, 120, 150]
     img[60:, :] = [75, 75, 75]
-    # Add road texture noise
     noise = rng.integers(-15, 15, (IMG_H - 60, IMG_W, 3))
     img[60:] = np.clip(img[60:].astype(np.int16) + noise, 0, 255).astype(np.uint8)
-    # Yellow center dashed line
     for y in range(60, IMG_H, 8):
         img[y:y+4, 62:65] = [210, 200, 0]
-    # White edge lines
     img[60:, 20:23] = [220, 220, 220]
     img[60:, 105:108] = [220, 220, 220]
     return img
@@ -122,7 +113,6 @@ def detect_lanes(img_bgr):
         maxLineGap=10,
     )
 
-    # Draw detected lines in red on a copy of the original
     annotated = img_bgr.copy()
     n_lines = 0
     if lines is not None:
@@ -155,15 +145,12 @@ def main():
         print(f"  [{name}]: {n_lines} lines detected")
         results.append((name, img, edges, annotated, n_lines))
 
-    # Save a 3-row x 3-col comparison grid
-    # Columns: original | edge map | annotated
     fig, axes = plt.subplots(3, 3, figsize=(10, 9))
     col_titles = ["Original", "Canny Edges", "Detected Lines (red)"]
     for col, title in enumerate(col_titles):
         axes[0, col].set_title(title, fontsize=10, fontweight="bold")
 
     for row, (name, orig, edges, annotated, n_lines) in enumerate(results):
-        # OpenCV images are BGR; convert to RGB for matplotlib
         orig_rgb = cv2.cvtColor(orig, cv2.COLOR_BGR2RGB)
         annot_rgb = cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB)
 

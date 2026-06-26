@@ -24,7 +24,6 @@ print(t); print(t.shape, t.dtype)
 print(t + 1)                    # element-wise broadcast
 print(t @ tf.transpose(t))      # matrix multiply
 
-# Variables (mutable)
 v = tf.Variable([1., 2., 3.])
 v.assign(v + 10)
 print(v)

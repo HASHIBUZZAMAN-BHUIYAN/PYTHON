@@ -10,7 +10,6 @@ b = np.array([[1, 2, 3], [4, 5, 6]])
 print(a.shape, a.dtype)          # (5,) int64
 print(b.shape, b.ndim, b.size)   # (2,3) 2  6
 
-# Factory functions
 print(np.zeros((3, 3)))
 print(np.ones((2, 4), dtype=float))
 print(np.eye(3))                  # identity matrix
@@ -26,10 +25,8 @@ print(m[0, :])        # first row
 print(m[:, 1])        # second column
 print(m[1:, 2:])      # sub-matrix
 
-# Boolean indexing
 print(m[m > 7])       # all elements > 7
 
-# Fancy indexing
 rows = np.array([0, 2])
 print(m[rows, :])     # rows 0 and 2
 
@@ -52,7 +49,6 @@ a = np.array([[1], [2], [3]])    # shape (3,1)
 b = np.array([10, 20, 30, 40])   # shape (4,)
 print(a + b)                     # shape (3,4) — broadcast
 
-# Element-wise vs matrix multiplication
 A = np.array([[1,2],[3,4]])
 B = np.array([[5,6],[7,8]])
 print(A * B)           # element-wise
@@ -86,7 +82,6 @@ print("Determinant:", np.linalg.det(A))
 print("Inverse:\n",    np.linalg.inv(A))
 print("Eigenvalues:",  np.linalg.eig(A)[0])
 
-# Solve Ax = b
 b = np.array([8., 13.])
 x = np.linalg.solve(A, b)
 print("Solution x:", x)         # [3. 2.]

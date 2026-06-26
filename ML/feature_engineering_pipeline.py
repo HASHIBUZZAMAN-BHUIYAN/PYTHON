@@ -27,7 +27,6 @@ os.makedirs("ML/outputs", exist_ok=True)
 np.random.seed(42)
 n = 500
 
-# --- Generate synthetic messy employee dataset ---
 departments = np.random.choice(["Sales", "Eng", "HR", "Ops"], n)
 years_exp   = np.random.randint(0, 20, n).astype(float)
 age_raw     = 22 + years_exp + np.random.normal(0, 3, n)
@@ -62,13 +61,11 @@ df = pd.DataFrame({
     "promoted":          promoted,
 })
 
-# --- BEFORE stats ---
 print("=== BEFORE feature engineering ===")
 print(f"Shape: {df.shape}")
 print(f"NaN counts:\n{df.isnull().sum().to_string()}")
 print(f"Promotion rate: {promoted.mean():.2%}")
 
-# --- BEFORE: Naive baseline (drop NaN rows, drop categorical) ---
 df_naive = df.dropna().copy()
 X_naive  = df_naive[["salary", "years_experience"]].values
 y_naive  = df_naive["promoted"].values
@@ -82,7 +79,6 @@ naive_pipe = Pipeline([
 naive_scores = cross_val_score(naive_pipe, X_naive, y_naive, cv=5, scoring="accuracy")
 print(f"\nBaseline CV (drop NaN, 2 numeric features): {naive_scores.mean():.4f} +/- {naive_scores.std():.4f}")
 
-# --- Build full Pipeline ---
 numeric_features     = ["age", "salary", "years_experience", "performance_score"]
 categorical_features = ["department"]
 
@@ -111,7 +107,6 @@ y = df["promoted"]
 full_scores = cross_val_score(full_pipeline, X, y, cv=5, scoring="accuracy")
 print(f"Full pipeline CV (imputed + OHE + 4 features): {full_scores.mean():.4f} +/- {full_scores.std():.4f}")
 
-# --- AFTER stats ---
 print("\n=== AFTER feature engineering (pipeline fitted on full data) ===")
 full_pipeline.fit(X, y)
 preprocessed = full_pipeline.named_steps["preprocessor"].transform(X)
@@ -128,7 +123,6 @@ for fname, coef in sorted(zip(all_feature_names, coefs), key=lambda x: abs(x[1])
     print(f"  {direction} {fname:<22} {coef:>8.4f}")
 print("-" * 45)
 
-# --- Bar chart of coefficients ---
 fig, ax = plt.subplots(figsize=(9, 5))
 sorted_pairs = sorted(zip(all_feature_names, coefs), key=lambda x: x[1])
 fnames_sorted = [p[0] for p in sorted_pairs]
@@ -143,7 +137,6 @@ plt.savefig("ML/outputs/feature_pipeline.png", dpi=100)
 plt.close()
 print("Plot saved -> ML/outputs/feature_pipeline.png")
 
-# --- Pipeline text representation ---
 print("\nPipeline structure:")
 print("-" * 45)
 print("Pipeline([")

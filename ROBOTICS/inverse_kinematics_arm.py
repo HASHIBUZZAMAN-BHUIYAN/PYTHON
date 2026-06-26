@@ -77,7 +77,7 @@ def ik(target):
         d = d_min
     cos_t2 = (x**2 + y**2 - L1**2 - L2**2) / (2*L1*L2)
     cos_t2 = np.clip(cos_t2, -1.0, 1.0)
-    t2 = np.arccos(cos_t2)            # elbow-up (positive theta2)
+    t2 = np.arccos(cos_t2)
     t1 = np.arctan2(y, x) - np.arctan2(L2*np.sin(t2), L1 + L2*np.cos(t2))
     return t1, t2
 
@@ -108,12 +108,10 @@ EXTENT = L1 + L2 + 0.5
 def draw(tgt_idx, frame_global, t1, t2, target):
     ax.clear();  ax2.clear()
 
-    # -- Workspace --
     ax.set_xlim(-EXTENT, EXTENT);  ax.set_ylim(-EXTENT, EXTENT)
     ax.set_aspect('equal');  ax.set_facecolor('#f0f0f0')
     ax.set_title(f"Workspace  target {tgt_idx+1}/{len(TARGETS)}", fontsize=9)
 
-    # Reachable workspace boundary
     theta_ring = np.linspace(0, 2*np.pi, 200)
     ax.plot((L1+L2)*np.cos(theta_ring), (L1+L2)*np.sin(theta_ring),
             'g--', alpha=0.3, lw=1, label='Outer reach')
@@ -121,12 +119,10 @@ def draw(tgt_idx, frame_global, t1, t2, target):
     ax.plot(inner*np.cos(theta_ring), inner*np.sin(theta_ring),
             'r--', alpha=0.3, lw=1, label='Inner reach')
 
-    # All previous end positions (trajectory)
     if len(all_ends) > 1:
         ae = np.array(all_ends)
         ax.plot(ae[:,0], ae[:,1], '-', color='slategrey', alpha=0.3, lw=1)
 
-    # Arm links
     elbow, end = fk(t1, t2)
     ax.plot([BASE[0], elbow[0]], [BASE[1], elbow[1]],
             '-o', color='royalblue', lw=5, ms=8, zorder=4)
@@ -135,7 +131,6 @@ def draw(tgt_idx, frame_global, t1, t2, target):
     ax.plot(*end,  'ro', ms=10, zorder=5, label='End-effector')
     ax.plot(*BASE, 'ks', ms=10, zorder=5, label='Base')
 
-    # Target
     ax.plot(*target, 'g*', ms=14, zorder=6, label='Target')
     ax.add_patch(patches.Circle(target, 0.15, color='green', alpha=0.2))
 
@@ -143,7 +138,6 @@ def draw(tgt_idx, frame_global, t1, t2, target):
                   f"|ee-target|={np.linalg.norm(end-target):.3f}m", fontsize=8)
     ax.legend(loc='upper left', fontsize=7);  ax.grid(alpha=0.2)
 
-    # -- Joint angle history --
     ax2.set_title("Joint Angles Over Time", fontsize=9)
     ax2.plot(np.degrees(history_t1), color='royalblue', label='theta1 (shoulder)', lw=1.5)
     ax2.plot(np.degrees(history_t2), color='forestgreen', label='theta2 (elbow)', lw=1.5)
@@ -169,7 +163,6 @@ for ti, target in enumerate(TARGETS):
             if INTERACTIVE:
                 plt.pause(0.03)
 
-# Final draw at last target
 draw(len(TARGETS)-1, frame_global, t1, t2, TARGETS[-1])
 print("Cycle complete. Final EE:", np.round(fk(t1, t2)[1], 3))
 

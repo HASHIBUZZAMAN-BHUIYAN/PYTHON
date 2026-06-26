@@ -126,16 +126,13 @@ def draw(step):
     ax.set_title(f"Multi-Goal Routing  step {step}/{N_STEPS}  "
                  f"visited {len(visited)}/{len(GOALS)}{dyn_tag}", fontsize=9)
 
-    # Static obstacles
     for obs in STATIC_OBS:
         ax.add_patch(patches.Circle(obs, OBS_R, color='tomato', alpha=0.7, zorder=2))
-    # Dynamic obstacle
     if dyn_placed:
         ax.add_patch(patches.Circle(all_obs[-1], OBS_R, facecolor='darkred',
                                     alpha=0.85, zorder=2, linewidth=2, linestyle='--',
                                     edgecolor='black', label='Dynamic obstacle'))
 
-    # Goals
     for i, g in enumerate(GOALS):
         color = '#999' if i in visited else COLORS_GOAL[i % len(COLORS_GOAL)]
         marker = 'x' if i in visited else '*'
@@ -143,14 +140,12 @@ def draw(step):
                 color=color, zorder=5)
         ax.text(g[0]+0.2, g[1]+0.2, str(i+1), fontsize=9, color=color, zorder=6)
 
-    # Planned tour (from current pos through remaining goals)
     if tour:
         plan_pts = [pos.copy()] + [GOALS[i] for i in tour[len(visited):]]
         plan_arr = np.array(plan_pts)
         ax.plot(plan_arr[:,0], plan_arr[:,1], '--', color='orange',
                 alpha=0.5, lw=1.5, zorder=3, label='Planned route')
 
-    # Path trace
     pts = np.array(path)
     ax.plot(pts[:,0], pts[:,1], '-', color='royalblue', alpha=0.4, lw=1, zorder=3)
 
@@ -163,12 +158,10 @@ def draw(step):
 
 done = False
 for step in range(N_STEPS):
-    # Dynamic obstacle event
     if step == DYN_STEP and not dyn_placed:
         dyn_obs = np.array([5.5, 3.5])
         all_obs.append(dyn_obs)
         dyn_placed = True
-        # Replan from current position with remaining goals
         remaining = [i for i in range(len(GOALS)) if i not in visited]
         tour = nn_tour(pos, remaining, GOALS)
         target_idx = tour[0] if tour else None
@@ -179,7 +172,6 @@ for step in range(N_STEPS):
     if target_idx is None:
         done = True; break
 
-    # Nav force toward current target
     noise_v = rng.normal(0, NOISE, 2)
     if escape_cd > 0:
         vel = K_ATT * (GOALS[target_idx] - pos) / max(np.linalg.norm(GOALS[target_idx]-pos), 0.1) + noise_v
@@ -189,7 +181,6 @@ for step in range(N_STEPS):
         spd = np.linalg.norm(vel)
         if spd > MAX_SPD:
             vel = vel / spd * MAX_SPD
-        # Check progress
         if len(path) > 40:
             progress = np.linalg.norm(np.array(path[-1]) - np.array(path[-40]))
             if progress < 0.6:
@@ -203,13 +194,12 @@ for step in range(N_STEPS):
     pos = np.clip(pos + vel * DT, 0.0, ARENA)
     path.append(pos.copy())
 
-    # Check if goal reached
     if np.linalg.norm(pos - GOALS[target_idx]) < GOAL_R:
         visited.append(target_idx)
         print(f"  step {step}: reached goal {target_idx+1}  ({len(visited)}/{len(GOALS)})")
         remaining = [i for i in range(len(GOALS)) if i not in visited]
         tour = nn_tour(pos, remaining, GOALS)
-        target_idx = tour[0] if tour else None    # next in remaining tour
+        target_idx = tour[0] if tour else None
 
     if step % DRAW_N == 0:
         draw(step)

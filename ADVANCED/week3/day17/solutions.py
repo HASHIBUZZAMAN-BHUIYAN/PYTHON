@@ -82,7 +82,6 @@ total_path=[]
 step_count=0
 for seg_idx, obs in enumerate(obstacle_path):
     g2=GRID.copy(); g2[obs]=1
-    # A* from current to GOAL on modified grid
     def astar_custom(start,goal,grid):
         def pass2(r,c): return in_b(r,c) and grid[r,c]==0
         open_h=[(0,start)]; cf={}; g_s={start:0}
@@ -99,9 +98,8 @@ for seg_idx, obs in enumerate(obstacle_path):
                     heapq.heappush(open_h,(tg+h,nb))
         return None
     p=astar_custom(current,GOAL,g2); replans+=1
-    # Move 20 steps along path
     if p:
-        steps=min(20,len(p)-1)
+        steps=min(20,len(p)-1)  # Move 20 steps along path
         current=p[steps]
         total_path+=p[:steps+1]
     step_count+=20
@@ -171,7 +169,6 @@ for _ in range(500):
     if np.nanmax(np.abs(V_new-V))<1e-4: break
     V=V_new
 
-# Greedy policy path
 r,c=START; vi_path=[(r,c)]
 for _ in range(200):
     best_a,best_v=None,-np.inf

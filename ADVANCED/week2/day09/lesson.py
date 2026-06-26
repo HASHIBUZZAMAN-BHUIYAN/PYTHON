@@ -24,13 +24,11 @@ m = torch.zeros(3, 4)
 r = torch.randn(2, 3)
 print(m, r)
 
-# Ops
 print(t * 2)           # element-wise
 print(t @ t)           # dot product
 print(r.T)             # transpose
 print(r.sum(dim=0))    # sum along rows
 
-# NumPy ↔ PyTorch
 arr = np.array([1., 2., 3.])
 t_from_np = torch.from_numpy(arr)
 back_to_np = t_from_np.numpy()
@@ -43,9 +41,8 @@ y = x ** 2 + 2*x + 1    # y = (x+1)^2
 y.backward()             # compute dy/dx
 print(f"x=3: y={y.item():.2f}, dy/dx={x.grad.item():.2f}")   # should be 2*(3+1)=8
 
-# Disable gradient tracking for inference
 with torch.no_grad():
-    z = x * 2            # no gradient tracked
+    z = x * 2
 
 # ─── 3. BUILDING A NETWORK ───────────────────────────────────────────────────
 print("\n=== 3. Building a Network with nn.Module ===")
@@ -78,11 +75,11 @@ optimizer = optim.Adam(tiny.parameters(), lr=0.05)
 criterion = nn.BCELoss()
 
 for epoch in range(1, 2001):
-    optimizer.zero_grad()           # clear previous gradients
-    output = tiny(X_xor)            # forward pass
-    loss   = criterion(output, y_xor)  # compute loss
-    loss.backward()                 # backprop
-    optimizer.step()                # update weights
+    optimizer.zero_grad()
+    output = tiny(X_xor)
+    loss   = criterion(output, y_xor)
+    loss.backward()
+    optimizer.step()
     if epoch % 500 == 0:
         pred = (output > 0.5).float()
         acc  = (pred == y_xor).float().mean()
@@ -92,7 +89,6 @@ print("XOR predictions:", tiny(X_xor).detach().numpy().flatten().round(2))
 
 # ─── 5. REAL DATA — DIGITS ───────────────────────────────────────────────────
 print("\n=== 5. Digits (subset 2000 samples) ===")
-# ~300 MB RAM, ~60s on CPU for 10 epochs
 
 digits = load_digits()
 idx = np.random.choice(len(digits.data), 2000, replace=False)
@@ -117,7 +113,7 @@ optimizer = optim.Adam(digit_net.parameters(), lr=1e-3)
 criterion = nn.CrossEntropyLoss()
 
 losses = []
-for epoch in range(1, 11):   # 10 epochs — fast on CPU with 2000 samples
+for epoch in range(1, 11):
     digit_net.train()
     epoch_loss = 0
     for X_batch, y_batch in loader:

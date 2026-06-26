@@ -25,7 +25,6 @@ np.random.seed(42)
 n_normal   = 475
 n_anomaly  = 25   # ~5%
 
-# Normal sensor readings
 temp_normal  = np.random.normal(70, 5,  n_normal)
 pres_normal  = np.random.normal(100, 8, n_normal)
 
@@ -55,7 +54,6 @@ lof = LocalOutlierFactor(n_neighbors=20, contamination=0.05)
 lof_raw  = lof.fit_predict(X)
 lof_pred = (lof_raw == -1).astype(int)
 
-# --- Results table ---
 methods = {
     "Z-score (thr=3)":      z_pred,
     "IsolationForest":      iso_pred,
@@ -75,9 +73,7 @@ for name, pred in methods.items():
     print(f"{name:<24} {n_det:>8} {prec:>6.3f} {rec:>6.3f} {f1:>6.3f}")
 print("-" * 68)
 
-# --- 2D scatter plot ---
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-titles = list(methods.keys())
 
 for ax, (name, pred) in zip(axes, methods.items()):
     normal_mask  = pred == 0

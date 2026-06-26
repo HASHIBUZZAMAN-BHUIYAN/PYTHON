@@ -20,9 +20,9 @@ print(f"Score {score} → Grade {grade}")   # C
 # Python uses indentation (4 spaces) to define blocks — NOT braces.
 x = 5
 if x > 0:
-    print("positive")    # inside the if
+    print("positive")
     print("still inside")
-print("always runs")     # outside the if
+print("always runs")
 
 # ─── 3. BOOLEAN LOGIC IN CONDITIONS ─────────────────────────────────────────
 age = 20

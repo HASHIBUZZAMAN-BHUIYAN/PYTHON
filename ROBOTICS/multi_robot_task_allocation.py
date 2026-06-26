@@ -69,7 +69,6 @@ def auction_assign(robot_pos, task_pos, done_tasks, assigned):
                    and j not in [assigned[r] for r in range(N_ROBOTS) if assigned[r] is not None]]
     if not free_robots or not free_tasks:
         return assigned
-    # All bidders bid on all free tasks; pick globally cheapest (robot, task) pair
     best_dist, best_r, best_t = float('inf'), None, None
     for r in free_robots:
         for t in free_tasks:
@@ -111,7 +110,6 @@ def draw(step):
     ax.set_title(f"Step {step}/{N_STEPS}  done {len(done_tasks)}/{N_TASKS}  "
                  f"{'[ALL DONE]' if len(done_tasks)==N_TASKS else ''}", fontsize=9)
 
-    # Tasks
     for j, tp in enumerate(TASK_POS):
         if j in done_tasks:
             ax.plot(*tp, 'X', ms=12, color='grey', alpha=0.5, zorder=3)
@@ -123,7 +121,6 @@ def draw(step):
         ax.text(*tp, str(j+1), ha='center', va='center', fontsize=9,
                 fontweight='bold', zorder=4)
 
-    # Robots
     for r in range(N_ROBOTS):
         pt = np.array(paths[r])
         ax.plot(pt[:,0], pt[:,1], '-', color=ROBOT_COLORS[r], alpha=0.2, lw=1)
@@ -132,7 +129,6 @@ def draw(step):
                 markeredgecolor=ec, markeredgewidth=2)
         ax.text(pos[r][0], pos[r][1], f"R{r+1}", ha='center', va='center',
                 fontsize=7, fontweight='bold', color='white', zorder=7)
-        # Assignment line
         if assigned[r] is not None and assigned[r] not in done_tasks:
             tp = TASK_POS[assigned[r]]
             ax.plot([pos[r][0], tp[0]], [pos[r][1], tp[1]], '--',
@@ -160,7 +156,6 @@ for step in range(N_STEPS):
 
     for r in range(N_ROBOTS):
         if exec_cd[r] > 0:
-            # Robot executing task
             exec_cd[r] -= 1
             if exec_cd[r] == 0:
                 t_done = assigned[r]
@@ -169,7 +164,6 @@ for step in range(N_STEPS):
                 print(f"  step {step:3d}: Robot {r+1} completed Task {t_done+1}  "
                       f"({len(done_tasks)}/{N_TASKS})")
                 assigned[r] = None
-                # Trigger new auction round
                 assigned = auction_assign(pos, TASK_POS, done_tasks, assigned)
                 if assigned[r] is not None:
                     timeline.append((step, r, assigned[r], 'ASSIGNED'))
@@ -177,19 +171,16 @@ for step in range(N_STEPS):
             continue
 
         if assigned[r] is None:
-            # Idle robot: try auction
             assigned = auction_assign(pos, TASK_POS, done_tasks, assigned)
             if assigned[r] is not None:
                 timeline.append((step, r, assigned[r], 'ASSIGNED'))
             vel[r] = np.zeros(2)
             continue
 
-        # Move toward assigned task
         tgt = TASK_POS[assigned[r]]
         diff = tgt - pos[r]
         d = np.linalg.norm(diff)
         if d < TASK_R:
-            # Arrived -- start execution
             exec_cd[r] = EXEC_TIME
             timeline.append((step, r, assigned[r], 'ARRIVED'))
             vel[r] = np.zeros(2)

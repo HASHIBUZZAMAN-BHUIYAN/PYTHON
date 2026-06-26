@@ -39,18 +39,15 @@ print(f"Subject with lowest avg : {df[subjects].mean().idxmin()}")
 fig, axes = plt.subplots(1, 3, figsize=(14, 4))
 fig.suptitle("Student Performance Analysis")
 
-# Distribution of averages
 axes[0].hist(df["Average"], bins=20, color="steelblue", edgecolor="white")
 axes[0].axvline(60, color="red", linestyle="--", label="Pass threshold")
 axes[0].set_title("Distribution of Averages")
 axes[0].set_xlabel("Score"); axes[0].legend()
 
-# Per-subject box plot
 df[subjects].boxplot(ax=axes[1])
 axes[1].set_title("Score Distribution per Subject")
 axes[1].tick_params(axis="x", rotation=30)
 
-# Pass rate by grade
 pass_rate = df.groupby("Grade")["Pass"].mean() * 100
 pass_rate.sort_index().plot(kind="bar", ax=axes[2], color="green", edgecolor="white")
 axes[2].set_title("Pass Rate by Grade")

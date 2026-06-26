@@ -1,6 +1,5 @@
 # Advanced Day 09 Mini-Project — PyTorch Multi-Class Digit Classifier
 # ~300 MB RAM, ~3 min on CPU
-# Scale up: increase EPOCHS or N_SAMPLES for better accuracy with more hardware.
 
 import torch, torch.nn as nn, torch.optim as optim
 import numpy as np, matplotlib.pyplot as plt

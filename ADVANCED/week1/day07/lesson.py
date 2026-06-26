@@ -73,7 +73,6 @@ for name, m in models.items():
 # ─── 7. VISUALISE ────────────────────────────────────────────────────────────
 fig, axes = plt.subplots(1, 3, figsize=(15, 4))
 
-# Confusion matrix
 cm = confusion_matrix(y_test, y_pred)
 axes[0].imshow(cm, cmap="Blues")
 for i in range(2):
@@ -84,12 +83,10 @@ axes[0].set_xticks([0,1]); axes[0].set_xticklabels(bc.target_names)
 axes[0].set_yticks([0,1]); axes[0].set_yticklabels(bc.target_names)
 axes[0].set_xlabel("Predicted"); axes[0].set_ylabel("Actual"); axes[0].set_title("Confusion Matrix")
 
-# ROC curve
 axes[1].plot(fpr, tpr, "b-", linewidth=2, label=f"AUC={roc_auc_score(y_test,y_prob):.3f}")
 axes[1].plot([0,1],[0,1],"k--"); axes[1].set_title("ROC Curve")
 axes[1].set_xlabel("FPR"); axes[1].set_ylabel("TPR"); axes[1].legend()
 
-# Learning curve
 train_mean = train_scores.mean(axis=1); train_std = train_scores.std(axis=1)
 val_mean   = val_scores.mean(axis=1);   val_std   = val_scores.std(axis=1)
 axes[2].plot(train_sizes, train_mean, "o-", label="Train")

@@ -2,28 +2,22 @@
 
 # ─── 1. DEFINING A CLASS ─────────────────────────────────────────────────────
 class Dog:
-    # Class attribute — shared by ALL instances
-    species = "Canis lupus familiaris"
+    species = "Canis lupus familiaris"  # class attribute — shared by all instances
 
-    # __init__ is the constructor — runs automatically when creating an object
     def __init__(self, name, breed, age):
-        # Instance attributes — unique to each object
         self.name  = name
         self.breed = breed
         self.age   = age
 
-    # Instance method — first param is always 'self'
     def bark(self):
         return f"{self.name} says: Woof!"
 
     def description(self):
         return f"{self.name} is a {self.age}-year-old {self.breed}"
 
-    # __str__ — called by print() and str()
     def __str__(self):
         return f"Dog({self.name}, {self.breed})"
 
-    # __repr__ — unambiguous developer representation
     def __repr__(self):
         return f"Dog(name={self.name!r}, breed={self.breed!r}, age={self.age})"
 
@@ -31,22 +25,22 @@ class Dog:
 dog1 = Dog("Buddy", "Labrador", 3)
 dog2 = Dog("Max",   "Poodle",   5)
 
-print(dog1.name)           # Buddy
-print(dog1.bark())         # Buddy says: Woof!
+print(dog1.name)
+print(dog1.bark())
 print(dog2.description())
-print(dog1)                # Dog(Buddy, Labrador) — calls __str__
-print(repr(dog1))          # calls __repr__
+print(dog1)
+print(repr(dog1))
 
 # ─── 3. CLASS vs INSTANCE ATTRIBUTES ─────────────────────────────────────────
-print(dog1.species)        # class attribute
-print(Dog.species)         # same thing accessed from the class
+print(dog1.species)
+print(Dog.species)
 Dog.species = "Domestic dog"
 print(dog2.species)        # "Domestic dog" — all instances updated
 
 # Instance attribute shadows class attribute if set on the instance
 dog1.species = "Wolf hybrid"
-print(dog1.species)        # "Wolf hybrid" (instance copy)
-print(dog2.species)        # "Domestic dog" (class copy)
+print(dog1.species)
+print(dog2.species)
 
 # ─── 4. MODIFYING ATTRIBUTES ─────────────────────────────────────────────────
 dog1.age = 4     # direct
@@ -54,12 +48,12 @@ print(dog1.age)
 
 # ─── 5. MORE COMPLETE EXAMPLE — BankAccount ──────────────────────────────────
 class BankAccount:
-    interest_rate = 0.05   # class attribute
+    interest_rate = 0.05
 
     def __init__(self, owner, balance=0.0):
         self.owner    = owner
         self.balance  = balance
-        self._transactions = []   # _name = convention for "private"
+        self._transactions = []   # _ prefix = convention for "private"
 
     def deposit(self, amount):
         if amount <= 0:

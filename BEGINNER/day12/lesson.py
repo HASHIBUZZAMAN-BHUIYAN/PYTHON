@@ -14,7 +14,7 @@ class Animal:
 
 class Dog(Animal):
     def __init__(self, name, breed):
-        super().__init__(name, "Woof")   # call parent __init__
+        super().__init__(name, "Woof")
         self.breed = breed
 
     def fetch(self):
@@ -34,27 +34,27 @@ class Cat(Animal):
 fido  = Dog("Fido", "Labrador")
 kitty = Cat("Kitty")
 
-print(fido.speak())    # inherited method
-print(fido.fetch())    # Dog-specific method
+print(fido.speak())
+print(fido.fetch())
 print(kitty.speak())
 print(kitty.purr())
-print(fido)            # __str__ overridden in Dog
+print(fido)
 
 # ─── 2. isinstance / issubclass ──────────────────────────────────────────────
-print(isinstance(fido, Dog))     # True
-print(isinstance(fido, Animal))  # True — also an Animal
-print(issubclass(Dog, Animal))   # True
+print(isinstance(fido, Dog))
+print(isinstance(fido, Animal))
+print(issubclass(Dog, Animal))
 
 # ─── 3. POLYMORPHISM ─────────────────────────────────────────────────────────
 animals = [Dog("Rex","Poodle"), Cat("Whiskers"), Animal("Bird","Tweet")]
 for a in animals:
-    print(a.speak())   # each calls ITS OWN version of speak()
+    print(a.speak())
 
 # ─── 4. ENCAPSULATION — name mangling ────────────────────────────────────────
 class BankAccount:
     def __init__(self, owner, balance):
         self.owner   = owner
-        self.__balance = balance    # __name → _BankAccount__balance internally
+        self.__balance = balance    # name-mangled to _BankAccount__balance
 
     def deposit(self, amt):
         if amt > 0: self.__balance += amt

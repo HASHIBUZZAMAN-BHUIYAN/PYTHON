@@ -6,13 +6,12 @@
 # Use comments to explain WHY, not what.
 
 # ─── 2. PRINT ────────────────────────────────────────────────────────────────
-print("Hello, Python!")          # plain string
-print(42)                        # integer
-print(3.14)                      # float
-print(True)                      # boolean
+print("Hello, Python!")
+print(42)
+print(3.14)
+print(True)
 
 # ─── 3. VARIABLES ────────────────────────────────────────────────────────────
-# A variable is a name that points to a value in memory.
 name = "Alice"
 age = 20
 height = 1.68
@@ -27,26 +26,24 @@ score_1 = 95
 # ─── 4. DATA TYPES ───────────────────────────────────────────────────────────
 # int   – whole numbers
 x = 10
-print(type(x))        # <class 'int'>
+print(type(x))
 
 # float – decimal numbers
 pi = 3.14159
-print(type(pi))       # <class 'float'>
+print(type(pi))
 
 # str   – text (single or double quotes)
 greeting = "Hello"
 city = 'Dhaka'
-print(type(greeting))  # <class 'str'>
+print(type(greeting))
 
 # bool  – True or False (capital T/F)
 is_raining = False
-print(type(is_raining))  # <class 'bool'>
+print(type(is_raining))
 
-# Check any variable's type
-print(type(age))      # <class 'int'>
+print(type(age))
 
 # ─── 5. F-STRINGS (formatted string literals) ────────────────────────────────
-# Use f"..." to embed variables directly in text.
 print(f"My name is {name} and I am {age} years old.")
 print(f"Pi is approximately {pi:.2f}")  # :.2f = 2 decimal places
 
@@ -61,10 +58,10 @@ user_age = int(user_age)
 print(f"Next year you will be {user_age + 1}.")
 
 # ─── 7. MULTIPLE ASSIGNMENT ──────────────────────────────────────────────────
-a, b, c = 1, 2, 3          # assign three at once
+a, b, c = 1, 2, 3
 print(a, b, c)
 
-x = y = 0                  # both point to 0
+x = y = 0
 print(x, y)
 
 # ─── 8. CONSTANTS (convention only) ──────────────────────────────────────────

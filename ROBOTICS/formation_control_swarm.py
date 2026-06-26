@@ -65,7 +65,6 @@ def target_pos(t):
     ])
 
 # ─── INITIAL POSITIONS ────────────────────────────────────────────────────────
-# Robots start near (1,1) in rough V-shape with small random offsets
 init_center = np.array([1.5, 1.5])
 pos = np.array([init_center + OFFSETS[i] + rng.uniform(-0.3, 0.3, 2)
                 for i in range(N_ROBOTS)])
@@ -94,27 +93,20 @@ def draw(step, t):
                  f"form_err={form_errors[-1]:.2f}m  "
                  f"target=({tpos[0]:.1f},{tpos[1]:.1f})", fontsize=9)
 
-    # Target + leader goal
     ax.plot(*tpos, 'r*', ms=16, zorder=5, label='Target')
 
-    # Paths
     for i in range(N_ROBOTS):
         pt = np.array(paths[i])
         ax.plot(pt[:,0], pt[:,1], '-', color=COLORS[i], alpha=0.2, lw=1)
 
-    # Desired formation positions
     for i in range(1, N_ROBOTS):
         dp = pos[0] + OFFSETS[i]
         ax.plot(*dp, '+', ms=10, color=COLORS[i], alpha=0.5, zorder=4)
 
-    # Formation outline (V-shape connecting robots)
-    for i in [3, 1, 0, 2, 4]:
-        pass   # just draw connections
     v_order = [3, 1, 0, 2, 4]
     vp = np.array([pos[i] for i in v_order])
     ax.plot(vp[:,0], vp[:,1], '-', color='grey', alpha=0.4, lw=2, zorder=3)
 
-    # Robots
     for i in range(N_ROBOTS):
         ax.plot(*pos[i], 'o', ms=14, color=COLORS[i], zorder=6,
                 label=LABELS[i], markeredgecolor='black', markeredgewidth=0.5)
@@ -125,7 +117,6 @@ def draw(step, t):
 
     ax.legend(loc='lower right', fontsize=7, ncol=2);  ax.grid(alpha=0.2)
 
-    # Formation error over time
     ax2.plot(form_errors, color='steelblue', lw=1.5)
     ax2.axhline(0, color='green', lw=0.5, linestyle='--')
     ax2.set_title("Formation Error (avg deviation from ideal position)", fontsize=9)
@@ -137,7 +128,6 @@ def draw(step, t):
 for step in range(N_STEPS):
     t = step * DT
 
-    # ── Leader: PD toward figure-8 target ────────────────────────────────────
     tgt = target_pos(t)
     err_lead = tgt - pos[0]
     vel[0] = K_LEAD * err_lead - K_D * vel[0]
@@ -145,13 +135,11 @@ for step in range(N_STEPS):
     if spd > MAX_SPD:
         vel[0] = vel[0] / spd * MAX_SPD
 
-    # ── Followers: PD toward desired offset position ──────────────────────────
     for i in range(1, N_ROBOTS):
         desired = pos[0] + OFFSETS[i]
         err = desired - pos[i]
         vel[i] = K_P * err - K_D * vel[i]
 
-        # Inter-robot repulsion (avoid collisions)
         for j in range(N_ROBOTS):
             if j == i:
                 continue
@@ -164,13 +152,11 @@ for step in range(N_STEPS):
         if spd > MAX_SPD:
             vel[i] = vel[i] / spd * MAX_SPD
 
-    # ── Integrate positions ───────────────────────────────────────────────────
     pos += vel * DT
     pos = np.clip(pos, 0.0, 10.0)
     for i in range(N_ROBOTS):
         paths[i].append(pos[i].copy())
 
-    # ── Formation error: average distance from ideal offsets ─────────────────
     err_total = np.mean([np.linalg.norm(pos[i] - (pos[0] + OFFSETS[i]))
                          for i in range(1, N_ROBOTS)])
     form_errors.append(err_total)

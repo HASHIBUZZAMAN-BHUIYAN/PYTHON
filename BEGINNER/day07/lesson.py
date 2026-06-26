@@ -9,9 +9,9 @@ print(person.get("age"))    # 25
 print(person.get("email", "N/A"))  # N/A (default if key missing)
 
 # ─── 2. ADD / UPDATE / DELETE ────────────────────────────────────────────────
-person["email"] = "alice@example.com"  # add
-person["age"] = 26                      # update
-del person["city"]                      # delete
+person["email"] = "alice@example.com"
+person["age"] = 26
+del person["city"]
 print(person)
 
 # pop() removes and returns
@@ -25,19 +25,19 @@ print("Alice" in person)   # False — values are not checked by 'in'
 # ─── 4. ITERATING ────────────────────────────────────────────────────────────
 scores = {"Math": 90, "Science": 85, "English": 78}
 
-for key in scores:              # iterate over keys
+for key in scores:
     print(key)
 
-for value in scores.values():   # iterate over values
+for value in scores.values():
     print(value)
 
-for k, v in scores.items():     # iterate over (key, value) pairs
+for k, v in scores.items():
     print(f"{k}: {v}")
 
 # ─── 5. USEFUL DICT METHODS ──────────────────────────────────────────────────
-print(scores.keys())     # dict_keys
-print(scores.values())   # dict_values
-print(len(scores))       # 3
+print(scores.keys())
+print(scores.values())
+print(len(scores))
 
 # update() merges another dict
 scores.update({"Art": 88, "Math": 95})   # adds Art, overwrites Math

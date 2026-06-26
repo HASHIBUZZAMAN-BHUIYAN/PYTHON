@@ -71,7 +71,6 @@ def simulate(Kp, Ki, Kd, setpoint=22., T_init=15., T_outside=5., dt=0.1, n_steps
     print(f"{label:<30}: final_T={temps[-1]:.2f}°C  overshoot={overshoot:.2f}  ss_error={ss_error:.3f}")
     return times, temps, controls
 
-# Compare different PID configurations
 configs = [
     (2.0, 0.0, 0.0, "P only"),
     (2.0, 0.5, 0.0, "PI"),
@@ -94,7 +93,6 @@ axes[0].set_title("Temperature Control — PID Comparison")
 axes[0].set_xlabel("Time (s)"); axes[0].set_ylabel("Temperature (°C)")
 axes[0].legend(fontsize=8); axes[0].grid(True, alpha=0.3)
 
-# Show control signal for the tuned PID
 label = "PID (tuned)"
 axes[1].plot(all_results[label][0], all_results[label][2], color="tomato")
 axes[1].axhline(0, color="black", linewidth=0.5)

@@ -113,7 +113,6 @@ def draw(step, pos, vel, done_flag):
         ax.annotate('', xy=pos+vel/spd*0.45, xytext=pos,
                     arrowprops=dict(arrowstyle='->', color='blue', lw=2))
     ax.legend(loc='upper left', fontsize=8);  ax.grid(alpha=0.2)
-    # Force diagram
     fa = f_att(pos);  fr = f_rep(pos);  ft = fa + fr
     norm_ft = np.linalg.norm(ft)
     if norm_ft > MAX_SPD:
@@ -145,7 +144,6 @@ for step in range(N_STEPS):
         if spd > MAX_SPD:
             vel = vel / spd * MAX_SPD
 
-        # Position-progress stuck detection (more reliable than speed check)
         if len(path) > STUCK_WIN:
             progress = np.linalg.norm(np.array(path[-1]) - np.array(path[-STUCK_WIN]))
             if progress < STUCK_THR:

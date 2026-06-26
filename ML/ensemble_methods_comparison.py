@@ -32,13 +32,9 @@ import matplotlib.pyplot as plt
 
 os.makedirs("ML/outputs", exist_ok=True)
 
-# --- Dataset ---
 X, y = make_classification(n_samples=1000, n_features=10, n_informative=5,
                             n_redundant=2, random_state=42)
 print(f"Dataset: {X.shape}, class balance: {y.mean():.2f}")
-
-# --- Models ---
-base_dt = DecisionTreeClassifier(random_state=42)
 
 models = {
     "DecisionTree (base)":   DecisionTreeClassifier(random_state=42),
@@ -49,7 +45,6 @@ models = {
     "AdaBoost(n=100)":       AdaBoostClassifier(n_estimators=100, random_state=42),
 }
 
-# --- 5-fold CV ---
 cv_results = {}
 print("\nRunning 5-fold CV (this may take 15-20s)...")
 for name, model in models.items():
@@ -57,7 +52,6 @@ for name, model in models.items():
     cv_results[name] = scores
     print(f"  {name:<26} {scores.mean():.4f} +/- {scores.std():.4f}")
 
-# --- Print table ---
 print("\nEnsemble Methods - 5-Fold CV Accuracy")
 print("-" * 50)
 print(f"{'Model':<26} {'Mean':>8} {'Std':>8}")
@@ -69,7 +63,6 @@ print("-" * 50)
 best_name = max(cv_results, key=lambda k: cv_results[k].mean())
 print(f"Best model: {best_name} (mean acc={cv_results[best_name].mean():.4f})")
 
-# --- Bar chart with error bars ---
 names   = list(cv_results.keys())
 means   = [cv_results[n].mean() for n in names]
 stds    = [cv_results[n].std()  for n in names]

@@ -1,8 +1,7 @@
 # Day 10 — Error Handling
 
 # ─── 1. UNHANDLED EXCEPTION ──────────────────────────────────────────────────
-# Uncommenting the next line would crash the program:
-# print(1 / 0)   # ZeroDivisionError
+# print(1 / 0)   # ZeroDivisionError — crashes if uncommented
 
 # ─── 2. BASIC try / except ───────────────────────────────────────────────────
 try:
@@ -17,8 +16,8 @@ def safe_divide(a, b):
     except ZeroDivisionError:
         return None
 
-print(safe_divide(10, 2))    # 5.0
-print(safe_divide(10, 0))    # None
+print(safe_divide(10, 2))
+print(safe_divide(10, 0))
 
 # ─── 4. MULTIPLE EXCEPT CLAUSES ──────────────────────────────────────────────
 def parse_number(s):
@@ -41,7 +40,7 @@ try:
 except ValueError as e:
     print(f"ValueError caught: {e}")
 
-# ─── 6. except Exception — catch-all (use sparingly) ─────────────────────────
+# ─── 6. except Exception — catch-all (avoid broad catches in production) ─────
 try:
     data = [1, 2, 3]
     print(data[10])
@@ -54,7 +53,7 @@ try:
 except ValueError:
     print("Bad input")
 else:
-    print(f"Parsed successfully: {num}")   # this runs
+    print(f"Parsed successfully: {num}")
 
 # ─── 8. finally — always runs ────────────────────────────────────────────────
 def read_file(path):
@@ -66,7 +65,7 @@ def read_file(path):
         return "File not found"
     finally:
         if f:
-            f.close()   # always close, even if open succeeded but read failed
+            f.close()
         print("finally ran")
 
 print(read_file("nonexistent.txt"))

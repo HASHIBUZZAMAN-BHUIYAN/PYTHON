@@ -36,7 +36,6 @@ def transform_2d(angle_rad, tx, ty):
         [0,      0,      1 ]
     ])
 
-# Rotate a point 45° and translate
 p = np.array([1., 0., 1.])   # homogeneous
 T = transform_2d(np.pi/4, 2., 1.)
 p_transformed = T @ p
@@ -62,7 +61,6 @@ def forward_kinematics_2link(theta1, theta2, L1=L1, L2=L2):
     ee = j1 + np.array([L2 * np.cos(theta1 + theta2), L2 * np.sin(theta1 + theta2)])
     return origin, j1, ee
 
-# Test
 theta1, theta2 = np.pi/4, np.pi/3
 o, j1, ee = forward_kinematics_2link(theta1, theta2)
 print(f"θ1={np.degrees(theta1):.0f}°, θ2={np.degrees(theta2):.0f}°")
@@ -72,7 +70,6 @@ print(f"End-effector: {ee.round(3)}")
 
 # ─── 3. WORKSPACE VISUALIZATION ──────────────────────────────────────────────
 print("\n=== 3. Workspace Visualization ===")
-# Trace the reachable workspace
 workspace_x, workspace_y = [], []
 for t1 in np.linspace(0, 2*np.pi, 50):
     for t2 in np.linspace(-np.pi, np.pi, 50):
@@ -118,12 +115,10 @@ def draw_arm(ax, theta1, theta2, color="steelblue", label=""):
 
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-# Workspace
 axes[0].scatter(workspace_x, workspace_y, s=1, alpha=0.1, color="steelblue")
 axes[0].set_aspect("equal"); axes[0].set_title("Reachable Workspace")
 axes[0].set_xlabel("x"); axes[0].set_ylabel("y"); axes[0].grid(True, alpha=0.3)
 
-# Arm configurations
 axes[1].set_xlim(-2.2, 2.2); axes[1].set_ylim(-2.2, 2.2); axes[1].set_aspect("equal")
 axes[1].grid(True, alpha=0.3); axes[1].set_title("IK Solutions (elbow up/down)")
 t1_up, t2_up = inverse_kinematics_2link(*target, elbow_up=True)
@@ -138,7 +133,6 @@ print("\nSaved kinematics.png")
 
 # ─── 6. SIMPLE TRAJECTORY FOLLOWING ──────────────────────────────────────────
 print("\n=== 5. Trajectory Following Demo ===")
-# Move end-effector along a circular path
 angles_path = np.linspace(0, 2*np.pi, 40)
 r_path = 0.6
 path_x = 0.8 + r_path * np.cos(angles_path)

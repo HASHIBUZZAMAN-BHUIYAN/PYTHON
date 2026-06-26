@@ -34,14 +34,12 @@ print("=" * 50)
 print(f"\nN = {n}")
 print(df.describe().round(2))
 
-# Group comparison: disease vs no-disease
 d1 = df[df["disease"]==1]["sbp"]
 d0 = df[df["disease"]==0]["sbp"]
 t, p = stats.ttest_ind(d1, d0)
 print(f"\nSBP: disease={d1.mean():.1f}, no-disease={d0.mean():.1f}")
 print(f"t-test: t={t:.3f}, p={p:.4e} → {'Significant' if p<0.05 else 'NS'}")
 
-# Correlation with disease
 for col in ["age","bmi","sbp","cholesterol"]:
     r, pv = stats.pointbiserialr(df["disease"], df[col])
     print(f"Correlation ({col} vs disease): r={r:.3f}, p={pv:.4f}")
@@ -66,7 +64,6 @@ axes[1,0].hist([df[df["smoker"]==0]["cholesterol"], df[df["smoker"]==1]["cholest
                bins=20, label=["Non-smoker","Smoker"], alpha=0.6, color=["blue","red"])
 axes[1,0].set_title("Cholesterol by Smoking Status"); axes[1,0].legend()
 
-# Correlation heatmap
 numeric_cols = ["age","bmi","sbp","cholesterol","disease"]
 corr = df[numeric_cols].corr()
 im = axes[1,1].imshow(corr, cmap="coolwarm", vmin=-1, vmax=1)

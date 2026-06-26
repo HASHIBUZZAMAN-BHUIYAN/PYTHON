@@ -58,7 +58,6 @@ for _ in range(n_steps):
 
     steer = pid.step(-composite_error)  # negate: positive CTE → steer up (positive)
 
-    # Update heading and position
     theta += steer * dt + np.random.normal(0, 0.01)   # small noise
     x     += v * np.cos(theta) * dt
     y     += v * np.sin(theta) * dt
@@ -79,7 +78,6 @@ y_ref = target_y(x_ref)
 # ─── Plot ─────────────────────────────────────────────────────────────────────
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
 
-# 1. XY path
 axes[0].plot(x_ref, y_ref, "r--", linewidth=2, label="Target track")
 axes[0].plot(robot_xs, robot_ys, "b-", linewidth=1.2, label="Robot path", alpha=0.8)
 axes[0].plot(robot_xs[0], robot_ys[0], "g^", markersize=10, label="Start")
@@ -88,7 +86,6 @@ axes[0].set_title("Curved Track Following")
 axes[0].set_xlabel("x (m)"); axes[0].set_ylabel("y (m)")
 axes[0].legend(fontsize=8); axes[0].grid(alpha=0.3)
 
-# 2. Cross-track error over time
 t_arr = np.arange(len(errors)) * dt
 axes[1].plot(t_arr, errors, color="steelblue")
 axes[1].axhline(0., color="k", linestyle="--")
@@ -97,7 +94,6 @@ axes[1].set_title("Cross-Track Error vs Time")
 axes[1].set_xlabel("Time (s)"); axes[1].set_ylabel("CTE (m)")
 axes[1].grid(alpha=0.3)
 
-# 3. Steering control signal
 axes[2].plot(t_arr, controls, color="tomato")
 axes[2].axhline(0., color="k", linestyle="--")
 axes[2].set_title("Steering Signal vs Time")

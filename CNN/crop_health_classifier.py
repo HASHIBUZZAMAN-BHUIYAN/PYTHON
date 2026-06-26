@@ -55,11 +55,9 @@ def gen_healthy(n):
     imgs = []
     for _ in range(n):
         img = np.zeros((SIZE, SIZE, 3), dtype=np.uint8)
-        # Green base
         img[:, :, 1] = np.clip(rng.normal(140, 18, (SIZE, SIZE)), 80, 200).astype(np.uint8)
         img[:, :, 0] = np.clip(rng.normal(40,  10, (SIZE, SIZE)), 10, 80).astype(np.uint8)
         img[:, :, 2] = np.clip(rng.normal(30,  10, (SIZE, SIZE)), 10, 70).astype(np.uint8)
-        # Optional vein lines (slightly lighter)
         for _ in range(rng.randint(2, 5)):
             row = rng.randint(5, SIZE - 5)
             img[row:row+1, :, 1] = np.clip(img[row:row+1, :, 1].astype(int) + 20, 0, 255)
@@ -72,11 +70,9 @@ def gen_diseased(n):
     imgs = []
     for _ in range(n):
         img = np.zeros((SIZE, SIZE, 3), dtype=np.uint8)
-        # Same green base as healthy
         img[:, :, 1] = np.clip(rng.normal(130, 20, (SIZE, SIZE)), 70, 195).astype(np.uint8)
         img[:, :, 0] = np.clip(rng.normal(38,  12, (SIZE, SIZE)), 10, 80).astype(np.uint8)
         img[:, :, 2] = np.clip(rng.normal(28,  12, (SIZE, SIZE)), 10, 70).astype(np.uint8)
-        # Add 2-5 disease spots
         n_spots = rng.randint(2, 6)
         for _ in range(n_spots):
             cx  = rng.randint(8, SIZE - 8)
@@ -85,7 +81,6 @@ def gen_diseased(n):
             ry  = rng.randint(4, 10)
             yy, xx = np.ogrid[:SIZE, :SIZE]
             ellipse = ((xx - cx) / rx)**2 + ((yy - cy) / ry)**2 <= 1
-            # Spot colour: brown or yellow-brown
             if rng.rand() > 0.5:
                 img[ellipse, 0] = rng.randint(130, 180)   # brown: high R
                 img[ellipse, 1] = np.clip(img[ellipse, 1].astype(int) - 60, 20, 255)
@@ -183,7 +178,6 @@ print(f"\nTest accuracy: {test_acc:.3f}  ({time.time()-t0:.1f}s)")
 fig = plt.figure(figsize=(14, 10))
 gs  = fig.add_gridspec(2, 4, hspace=0.35, wspace=0.3)
 
-# Row 0: training curves
 ax_loss = fig.add_subplot(gs[0, 0])
 ax_acc  = fig.add_subplot(gs[0, 1])
 ax_loss.plot(range(1, EPOCHS+1), history["loss"], "o-", color="tomato")
@@ -191,7 +185,6 @@ ax_loss.set_title("Training Loss"); ax_loss.set_xlabel("Epoch"); ax_loss.grid(al
 ax_acc.plot(range(1, EPOCHS+1), history["acc"],  "o-", color="seagreen")
 ax_acc.set_title("Training Accuracy"); ax_acc.set_xlabel("Epoch"); ax_acc.grid(alpha=0.3)
 
-# Row 0 (right 2 cols): sample leaves
 ax_h = fig.add_subplot(gs[0, 2])
 ax_d = fig.add_subplot(gs[0, 3])
 sample_h = gen_healthy(1)[0]
@@ -199,7 +192,6 @@ sample_d = gen_diseased(1)[0]
 ax_h.imshow(sample_h); ax_h.set_title("Sample: Healthy"); ax_h.axis("off")
 ax_d.imshow(sample_d); ax_d.set_title("Sample: Diseased"); ax_d.axis("off")
 
-# Row 1: test prediction grid
 model.eval()
 rng.seed(1337)
 X_vis_h = np.array(gen_healthy(4),  dtype=np.float32) / 255.0
@@ -217,10 +209,8 @@ with torch.no_grad():
 CLASS_NAMES = ["Healthy", "Diseased"]
 for i in range(8):
     ax = fig.add_subplot(gs[1, i // 2] if i < 8 else None)
-    # Use 4 subplots across row 1 (2 leaves each)
     break
 
-# Simpler: 8-cell row with a dedicated GridSpec row
 fig2, axes2 = plt.subplots(1, 8, figsize=(16, 2.5))
 for i, ax in enumerate(axes2):
     img_np = X_vis[i]

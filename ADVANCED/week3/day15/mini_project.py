@@ -40,20 +40,17 @@ for px, py in zip(path_x, path_y):
 # ─── Static plot ──────────────────────────────────────────────────────────────
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
 
-# Plot trajectory
 axes[0].plot(path_x, path_y, "b--", alpha=0.4, label="Target path")
 axes[0].set_xlim(-2, 2); axes[0].set_ylim(-1.5, 1.5)
 axes[0].set_aspect("equal"); axes[0].grid(True, alpha=0.3)
 axes[0].set_title("Figure-8 Trajectory (target)")
 
-# Draw arm at a few waypoints
 colors = plt.cm.viridis(np.linspace(0, 1, 10))
 for i, (t1, t2) in enumerate(waypoints[::8]):
     o, j1, ee = fk(t1, t2)
     c = colors[i]
     axes[0].plot([o[0],j1[0],ee[0]], [o[1],j1[1],ee[1]], "o-", color=c, alpha=0.6, linewidth=2)
 
-# Joint angle plot
 t1s = [wp[0] for wp in waypoints]
 t2s = [wp[1] for wp in waypoints]
 axes[1].plot(np.degrees(t1s), label="θ1")

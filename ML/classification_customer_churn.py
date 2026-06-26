@@ -23,7 +23,6 @@ import matplotlib.pyplot as plt
 
 os.makedirs("ML/outputs", exist_ok=True)
 
-# --- Generate synthetic customer churn data ---
 np.random.seed(42)
 n = 1000
 
@@ -60,7 +59,6 @@ scaler = StandardScaler()
 X_train_s = scaler.fit_transform(X_train)
 X_test_s  = scaler.transform(X_test)
 
-# --- Models ---
 models = {
     "LogisticRegression":       LogisticRegression(max_iter=1000, random_state=42),
     "RandomForest":             RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1),
@@ -87,7 +85,6 @@ for name, model in models.items():
     results[name] = {"acc": acc, "prec": prec, "rec": rec, "f1": f1,
                      "auc": auc, "fpr": fpr, "tpr": tpr}
 
-# --- Print comparison table ---
 print("\nCustomer Churn Classification - Model Comparison")
 print("-" * 70)
 hdr = f"{'Model':<22} {'Acc':>6} {'Prec':>6} {'Rec':>6} {'F1':>6} {'AUC':>7}"
@@ -98,7 +95,6 @@ for name, m in results.items():
           f"{m['f1']:>6.3f} {m['auc']:>7.4f}")
 print("-" * 70)
 
-# --- Plot: ROC curves ---
 colors = ["steelblue", "darkorange", "green"]
 fig, ax = plt.subplots(figsize=(7, 6))
 for (name, m), color in zip(results.items(), colors):

@@ -88,7 +88,6 @@ waypoint_path.append(GOAL)
 print(f"Via waypoints      : length={len(waypoint_path)}, total_expanded={total_exp}")
 print(f"Overhead of waypoints: +{len(waypoint_path)-len(direct_path)} steps vs direct")
 
-# ─── Coverage map: cells visited by BFS from START ───────────────────────────
 from collections import deque
 def bfs_coverage(start):
     queue=deque([start]); vis={start}; dist={start:0}
@@ -121,7 +120,6 @@ def draw_path(ax, path, title, color):
 draw_path(axes[0], direct_path,   f"Direct A* (len={len(direct_path)})", [0.2,0.9,0.2])
 draw_path(axes[1], waypoint_path, f"Via waypoints (len={len(waypoint_path)})", [0.9,0.7,0.1])
 
-# Distance heatmap
 axes[2].imshow(D_GRID, cmap="viridis", interpolation="nearest")
 axes[2].plot([START[1]],[START[0]],"w^",markersize=12,label="Start")
 axes[2].plot([GOAL[1]], [GOAL[0]], "w*", markersize=14, label="Goal")

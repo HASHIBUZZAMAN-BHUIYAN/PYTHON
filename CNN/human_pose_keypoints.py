@@ -102,7 +102,6 @@ def draw_stick_figure(img, cx, cy, scale=1.0, angle_offset=0.0):
         pt_b = joints[b]
         cv2.line(img, pt_a, pt_b, WHITE, 2)
 
-    # Draw joint circles
     for name, pt in joints.items():
         r = 5 if name == "head" else 3
         cv2.circle(img, pt, r, JOINT_COLOR, -1)
@@ -116,7 +115,6 @@ def make_figure_image(pose_index):
     pose_index controls slight positional variation.
     """
     img = np.zeros((IMG_SIZE, IMG_SIZE, 3), dtype=np.uint8)
-    # Vary position and scale slightly per figure
     rng = np.random.default_rng(pose_index * 17 + 3)
     cx = int(IMG_SIZE // 2 + rng.integers(-8, 8))
     cy = int(IMG_SIZE // 2 + rng.integers(-5, 5))
@@ -149,7 +147,6 @@ def detect_keypoints(img_bgr):
     # Dilate slightly to restore joint blobs after erosion
     dilated = cv2.dilate(eroded, kernel, iterations=1)
 
-    # Find contours (external only)
     contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     keypoints = []
@@ -192,7 +189,6 @@ def main():
               f"detected {n_det}  {status}")
         figure_data.append((img, gt_joints, kpts))
 
-    # Visualize: each figure gets 2 columns (original | keypoints overlay)
     fig, axes = plt.subplots(n_figures, 2, figsize=(6, 14))
     fig.suptitle("Stick Figure Pose Keypoint Detection (Classical CV)", fontsize=11)
     axes[0, 0].set_title("Generated Figure", fontsize=9)
@@ -201,7 +197,6 @@ def main():
     for row, (img, gt_joints, kpts) in enumerate(figure_data):
         img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        # Overlay detected keypoints as blue dots
         overlay = img_rgb.copy()
         for (kx, ky) in kpts:
             cv2.circle(overlay, (kx, ky), 4, (0, 100, 255), -1)

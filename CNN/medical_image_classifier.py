@@ -73,7 +73,6 @@ def make_normal_image(rng):
 def make_abnormal_image(rng):
     """Uniform gray + bright blob (lesion) + Gaussian noise -> 'lesion'."""
     base = np.full((IMG_SIZE, IMG_SIZE), 0.45, dtype=np.float32)
-    # Random lesion position and size
     cx = rng.integers(16, IMG_SIZE - 16)
     cy = rng.integers(16, IMG_SIZE - 16)
     sigma = rng.uniform(4.0, 9.0)
@@ -174,8 +173,6 @@ def compute_metrics(y_true, y_pred):
 # -------------------------------------------------------------------------
 def save_output_plot(model, images, labels, confusion, output_path):
     model.eval()
-    # ---- Row 1: sample images ----
-    # Pick 4 normal and 4 abnormal for display
     normal_idx   = np.where(labels == 0)[0][:4]
     abnormal_idx = np.where(labels == 1)[0][:4]
     sample_idx   = np.concatenate([normal_idx, abnormal_idx])
@@ -193,7 +190,6 @@ def save_output_plot(model, images, labels, confusion, output_path):
 
     gs = fig.add_gridspec(2, 9, hspace=0.4, wspace=0.3)
 
-    # Top row: 8 sample images
     for i in range(8):
         ax = fig.add_subplot(gs[0, i])
         ax.imshow(sample_imgs[i, 0], cmap="gray", vmin=0, vmax=1)
@@ -202,7 +198,6 @@ def save_output_plot(model, images, labels, confusion, output_path):
                      fontsize=6, color=color)
         ax.axis("off")
 
-    # Bottom row: confusion matrix (spans full width)
     ax_cm = fig.add_subplot(gs[1, 3:6])
     im = ax_cm.imshow(confusion, cmap="Blues", vmin=0)
     class_labels = ["Normal", "Abnormal"]

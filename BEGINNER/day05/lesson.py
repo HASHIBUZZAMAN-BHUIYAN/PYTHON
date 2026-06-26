@@ -39,7 +39,7 @@ print("ha" * 3)   # hahaha
 
 # ─── 6. COMMON STRING METHODS ────────────────────────────────────────────────
 text = "  Hello, Python World!  "
-print(text.strip())          # removes leading/trailing whitespace
+print(text.strip())
 print(text.lower())
 print(text.upper())
 print(text.title())

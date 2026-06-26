@@ -21,7 +21,6 @@ import matplotlib.pyplot as plt
 
 os.makedirs("ML/outputs", exist_ok=True)
 
-# --- Generate synthetic customer data with 4 natural clusters ---
 np.random.seed(42)
 centers = [
     [2000, 5,  30],   # Low spend, low frequency, small basket
@@ -32,12 +31,10 @@ centers = [
 X_raw, y_true = make_blobs(n_samples=500, centers=centers,
                            cluster_std=[300, 500, 400, 600],
                            random_state=42)
-# Label columns conceptually: annual_spend, visit_frequency, avg_basket_size
 
 scaler = StandardScaler()
 X = scaler.fit_transform(X_raw)
 
-# --- KMeans (k=4) ---
 km = KMeans(n_clusters=4, random_state=42, n_init=10)
 km_labels = km.fit_predict(X)
 km_sil = silhouette_score(X, km_labels)
@@ -51,7 +48,6 @@ for k in range(4):
           f"spend={centroid_raw[0]:,.0f} freq={centroid_raw[1]:.1f} basket={centroid_raw[2]:.1f}")
 print(f"  Silhouette score: {km_sil:.4f}")
 
-# --- DBSCAN ---
 db = DBSCAN(eps=0.8, min_samples=5)
 db_labels = db.fit_predict(X)
 n_clusters_db = len(set(db_labels)) - (1 if -1 in db_labels else 0)
@@ -71,16 +67,13 @@ for k in sorted(set(db_labels)):
     label = "Noise" if k == -1 else f"Cluster {k}"
     print(f"  {label}: {(db_labels == k).sum()} samples")
 
-# --- PCA to 2D for visualization ---
 pca = PCA(n_components=2)
 X_2d = pca.fit_transform(X)
 ev = pca.explained_variance_ratio_
 print(f"\nPCA explained variance: PC1={ev[0]:.2%}, PC2={ev[1]:.2%}, "
       f"total={ev.sum():.2%}")
 
-# --- Plot ---
 fig, axes = plt.subplots(1, 2, figsize=(12, 5))
-colors_km = ["steelblue", "darkorange", "green", "red"]
 
 for ax, labels, title in zip(
         axes,

@@ -18,12 +18,10 @@ import matplotlib.pyplot as plt
 
 os.makedirs("ML/outputs", exist_ok=True)
 
-# --- Synthetic rating matrix (30 users x 20 movies, ~40% sparse) ---
 np.random.seed(42)
 n_users  = 30
 n_movies = 20
 
-# Start with zero matrix; fill ~60% of cells with 0 (unrated)
 ratings_raw = np.random.choice([0, 1, 2, 3, 4, 5],
                                size=(n_users, n_movies),
                                p=[0.40, 0.05, 0.10, 0.15, 0.20, 0.10])
@@ -36,7 +34,6 @@ print(f"Rating matrix: {R.shape}  |  Non-zero entries: {(R > 0).sum().sum()}")
 print(f"Sparsity: {(R == 0).sum().sum() / R.size:.1%}")
 
 
-# --- Cosine similarity (user-based) ---
 def cosine_sim(a, b):
     """Cosine similarity between two rating vectors (ignore zeros = unrated)."""
     mask = (a > 0) & (b > 0)
@@ -105,10 +102,8 @@ def recommend(R_matrix, target_user, top_n_users=3, top_n_items=5):
     return sorted_recs
 
 
-# --- Run recommendation for User_01 ---
 recs = recommend(R, target_user="User_01", top_n_users=3, top_n_items=5)
 
-# --- Heatmap of rating matrix ---
 fig, ax = plt.subplots(figsize=(10, 8))
 masked = np.ma.masked_where(ratings_raw == 0, ratings_raw.astype(float))
 cmap = plt.cm.YlOrRd

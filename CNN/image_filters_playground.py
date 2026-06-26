@@ -58,21 +58,16 @@ rng = np.random.RandomState(42)
 def make_test_image(h=256, w=256):
     """Geometric scene with clear edges and textures for filter demonstration."""
     img = np.ones((h, w, 3), dtype=np.uint8) * 200
-    # Gradient background
     for col in range(w):
         img[:, col, :] = 180 + int(40 * col / w)
-    # Shapes
     cv2.rectangle(img, (20, 20),   (100, 100), (60, 60, 180), -1)
     cv2.circle(img,    (180, 60),  45,          (200, 80, 40), -1)
     cv2.rectangle(img, (50, 140),  (150, 220),  (60, 150, 60), -1)
     cv2.ellipse(img,   (200, 180), (50, 30), 30, 0, 360, (160, 30, 160), -1)
-    # Text-like horizontal lines
     for y in range(30, 100, 8):
         cv2.line(img, (20, y), (100, y), (255, 255, 255), 1)
-    # Diagonal stripe
     for d in range(0, h, 20):
         cv2.line(img, (d, 0), (0, d), (100, 100, 100), 1)
-    # Noise patch
     img[180:230, 180:230] = rng.randint(80, 220, (50, 50, 3), dtype=np.uint8)
     return img
 
@@ -175,7 +170,6 @@ FILTERS = [
                        if True else None,                                   EMBOSS,     "Directional shadow effect"),
     ("Glow Blend",     apply_kernel(img_bgr, GLOW, "colour"),              GLOW,       "Soft centre-weighted average"),
 ]
-# Fix emboss entry (computed inline above)
 FILTERS[6] = (
     "Emboss",
     cv2.cvtColor(

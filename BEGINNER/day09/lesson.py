@@ -2,7 +2,6 @@
 import csv, os
 
 # ─── 1. WRITING A TEXT FILE ──────────────────────────────────────────────────
-# Use 'with' — it automatically closes the file even if an error occurs.
 with open("sample.txt", "w", encoding="utf-8") as f:
     f.write("Line 1\n")
     f.write("Line 2\n")
@@ -12,19 +11,18 @@ print("Written sample.txt")
 # ─── 2. READING ENTIRE FILE ──────────────────────────────────────────────────
 with open("sample.txt", "r", encoding="utf-8") as f:
     content = f.read()
-print(repr(content))    # shows \n characters
+print(repr(content))
 
 # ─── 3. READ LINE BY LINE ────────────────────────────────────────────────────
 with open("sample.txt", "r", encoding="utf-8") as f:
     for line in f:
-        print(line.rstrip())   # rstrip removes trailing \n
+        print(line.rstrip())
 
 # ─── 4. READ ALL LINES INTO A LIST ───────────────────────────────────────────
 with open("sample.txt", "r", encoding="utf-8") as f:
-    lines = f.readlines()   # list of strings including \n
+    lines = f.readlines()
 print(lines)
 
-# strip newlines
 clean_lines = [l.rstrip() for l in lines]
 print(clean_lines)
 
@@ -33,8 +31,8 @@ with open("sample.txt", "a", encoding="utf-8") as f:
     f.write("Line 4 (appended)\n")
 
 # ─── 6. CHECKING IF FILE EXISTS ──────────────────────────────────────────────
-print(os.path.exists("sample.txt"))   # True
-print(os.path.exists("nope.txt"))     # False
+print(os.path.exists("sample.txt"))
+print(os.path.exists("nope.txt"))
 
 # ─── 7. WRITING CSV ──────────────────────────────────────────────────────────
 students = [
@@ -52,7 +50,7 @@ print("Written students.csv")
 # ─── 8. READING CSV ──────────────────────────────────────────────────────────
 with open("students.csv", "r", encoding="utf-8") as f:
     reader = csv.reader(f)
-    header = next(reader)   # first row = header
+    header = next(reader)
     print("Header:", header)
     for row in reader:
         print(row)
@@ -61,7 +59,7 @@ with open("students.csv", "r", encoding="utf-8") as f:
 with open("students.csv", "r", encoding="utf-8") as f:
     reader = csv.DictReader(f)
     for row in reader:
-        print(dict(row))   # {'Name':'Alice', 'Math':'90', ...}
+        print(dict(row))
 
 # Write with DictWriter
 fields = ["Name", "Age", "City"]

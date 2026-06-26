@@ -12,20 +12,20 @@ print(a ** b)   # 1419857  exponentiation
 
 # ─── 2. AUGMENTED ASSIGNMENT ─────────────────────────────────────────────────
 x = 10
-x += 3    # x = x + 3  →  13
-x -= 2    # 11
-x *= 4    # 44
-x //= 5   # 8
-x **= 2   # 64
+x += 3
+x -= 2
+x *= 4
+x //= 5
+x **= 2
 print(x)  # 64
 
 # ─── 3. COMPARISON OPERATORS (return bool) ───────────────────────────────────
-print(7 == 7)   # True   equal
-print(7 != 8)   # True   not equal
-print(9 > 5)    # True   greater than
-print(3 < 2)    # False  less than
-print(5 >= 5)   # True   greater or equal
-print(4 <= 3)   # False  less or equal
+print(7 == 7)   # True
+print(7 != 8)   # True
+print(9 > 5)    # True
+print(3 < 2)    # False
+print(5 >= 5)   # True
+print(4 <= 3)   # False
 
 # ─── 4. LOGICAL OPERATORS ────────────────────────────────────────────────────
 # and  – both must be True
@@ -71,7 +71,6 @@ print(bool(42))     # True
 # ─── 7. COMMON PITFALL ───────────────────────────────────────────────────────
 # input() returns a string — always cast before arithmetic
 raw = "5"
-# print(raw + 3)     # TypeError!
 print(int(raw) + 3)  # 8  ✓
 
 # ─── 8. USEFUL BUILT-INS ─────────────────────────────────────────────────────

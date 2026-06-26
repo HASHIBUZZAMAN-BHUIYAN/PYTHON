@@ -3,7 +3,7 @@
 # ─── 1. for LOOP WITH range() ────────────────────────────────────────────────
 for i in range(5):          # 0, 1, 2, 3, 4
     print(i, end=" ")
-print()                     # newline
+print()
 
 # range(start, stop, step)
 for i in range(1, 11, 2):   # 1 3 5 7 9
@@ -48,7 +48,7 @@ while True:
 # break  – exit the loop immediately
 for n in range(10):
     if n == 5:
-        break           # stop at 5
+        break
     print(n, end=" ")
 print()                 # 0 1 2 3 4
 

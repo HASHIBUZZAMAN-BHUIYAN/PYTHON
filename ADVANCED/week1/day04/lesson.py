@@ -24,19 +24,16 @@ print(f"Range    : {data.max() - data.min()}")
 # ─── 2. PROBABILITY DISTRIBUTIONS ───────────────────────────────────────────
 print("\n=== Distributions ===")
 
-# Normal
 mu, sigma = 170, 10
 x = np.linspace(130, 210, 300)
 pdf_normal = stats.norm.pdf(x, mu, sigma)
 print(f"P(height > 180 | N({mu},{sigma})) = {1 - stats.norm.cdf(180, mu, sigma):.4f}")
 
-# Binomial: 10 coin flips, p=0.5
 n_flips, p = 10, 0.5
 k = np.arange(0, 11)
 pmf_binom = stats.binom.pmf(k, n_flips, p)
 print(f"P(exactly 7 heads in 10 flips) = {stats.binom.pmf(7, 10, 0.5):.4f}")
 
-# Poisson: avg 3 events per interval
 lam = 3
 print(f"P(>=5 events | Poisson(3)) = {1 - stats.poisson.cdf(4, lam):.4f}")
 
@@ -58,8 +55,8 @@ print(f"Spearman Height vs Weight: ρ={spearman_hw:.3f}")
 # ─── 4. HYPOTHESIS TESTING ───────────────────────────────────────────────────
 print("\n=== Hypothesis Testing ===")
 # H0: groups have same mean. Ha: different means.
-group_a = np.random.normal(68, 5, 30)    # ~68 mean
-group_b = np.random.normal(72, 5, 30)    # ~72 mean — slightly different
+group_a = np.random.normal(68, 5, 30)
+group_b = np.random.normal(72, 5, 30)
 
 t_stat, p_value = stats.ttest_ind(group_a, group_b)
 print(f"t-statistic: {t_stat:.4f}")
@@ -70,7 +67,6 @@ if p_value < alpha:
 else:
     print(f"Fail to reject H0 (p >= {alpha})")
 
-# One-sample t-test
 t_one, p_one = stats.ttest_1samp(data, popmean=10)
 print(f"\nOne-sample t-test (H0: mean=10): t={t_one:.3f}, p={p_one:.4f}")
 

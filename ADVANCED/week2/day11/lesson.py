@@ -1,6 +1,5 @@
 # Advanced Day 11 — CNN Fundamentals
 # ~300 MB RAM, ~5-8 min on CPU (small dataset + small model)
-# Scale up: increase N_TRAIN or EPOCHS for better results
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,7 +25,6 @@ Input(H×W) + Filter(k×k) → Output((H-k+1)×(W-k+1))
 With padding='same' → output same size as input.
 """)
 
-# Manual 2D convolution demonstration
 def conv2d_manual(image, kernel):
     h, w = image.shape
     kh, kw = kernel.shape
@@ -36,11 +34,9 @@ def conv2d_manual(image, kernel):
             out[i,j] = (image[i:i+kh, j:j+kw] * kernel).sum()
     return out
 
-# Synthetic image
 image = np.zeros((8,8)); image[2:6, 2:6] = 1
 print("Image (8×8):\n", image.astype(int))
 
-# Edge detection kernel (Sobel-like)
 sobel_x = np.array([[-1,0,1],[-2,0,2],[-1,0,1]], dtype=float)
 feature_map = conv2d_manual(image, sobel_x)
 print("Sobel-X feature map:\n", feature_map.astype(int))
@@ -78,18 +74,15 @@ class SmallCNN(nn.Module):
     """2-layer CNN for 8×8 grayscale images (digits dataset)."""
     def __init__(self, n_classes=10):
         super().__init__()
-        # Conv block 1: 1 channel → 8 channels, 3×3 kernel, pad=1 keeps size
+        # pad=1 keeps spatial size; MaxPool(2,2) halves it: 8→4→2
         self.conv1 = nn.Conv2d(1, 8, kernel_size=3, padding=1)
-        self.pool  = nn.MaxPool2d(2, 2)   # 8×8 → 4×4
-        # Conv block 2: 8 → 16 channels, 3×3 kernel
+        self.pool  = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(8, 16, kernel_size=3, padding=1)
-        # After pool again: 4×4 → 2×2
         self.fc1   = nn.Linear(16 * 2 * 2, 64)
         self.fc2   = nn.Linear(64, n_classes)
         self.dropout = nn.Dropout(0.3)
 
     def forward(self, x):
-        # x: (batch, 1, 8, 8)
         x = self.pool(F.relu(self.conv1(x)))   # → (batch, 8, 4, 4)
         x = self.pool(F.relu(self.conv2(x)))   # → (batch, 16, 2, 2)
         x = x.view(x.size(0), -1)             # flatten → (batch, 64)
@@ -99,11 +92,9 @@ class SmallCNN(nn.Module):
 
 model = SmallCNN()
 print(model)
-# Count params
 n_params = sum(p.numel() for p in model.parameters())
 print(f"Parameters: {n_params:,}")
 
-# Test forward pass
 dummy = torch.zeros(4, 1, 8, 8)
 print("Output shape:", model(dummy).shape)   # (4, 10)
 
@@ -115,7 +106,6 @@ y = digits.target
 
 X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
 
-# Reshape to (N, 1, 8, 8) for CNN
 X_tr_t = torch.FloatTensor(X_tr).view(-1, 1, 8, 8)
 X_te_t = torch.FloatTensor(X_te).view(-1, 1, 8, 8)
 y_tr_t = torch.LongTensor(y_tr)
@@ -146,9 +136,9 @@ for epoch in range(1, 16):
 
 # ─── 6. VISUALISE FEATURE MAPS ────────────────────────────────────────────────
 model.eval()
-sample = X_te_t[0:1]  # one test image
+sample = X_te_t[0:1]
 with torch.no_grad():
-    feat_maps = F.relu(model.conv1(sample))  # (1, 8, 4, 4)... wait, conv1 before pool
+    feat_maps = F.relu(model.conv1(sample))
 
 fig, axes = plt.subplots(2, 5, figsize=(12, 5))
 fig.suptitle("CNN First-Layer Feature Maps (sample digit)")

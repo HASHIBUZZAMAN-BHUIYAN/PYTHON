@@ -49,7 +49,6 @@ temp_normal = 70.0 + 5.0 * np.sin(2 * np.pi * t / 50) + rng.normal(0, 0.5, N_SAM
 # Vibration: base 0.3g + 2Hz oscillation + small noise
 vib_normal  = 0.3 + 0.1 * np.sin(2 * np.pi * 2 * t) + rng.normal(0, 0.02, N_SAMPLES)
 
-# Inject anomalies
 anomaly_mask = np.zeros(N_SAMPLES, dtype=bool)
 n_anomalies  = int(N_SAMPLES * ANOMALY_RATE)
 anomaly_idx  = rng.choice(N_SAMPLES, size=n_anomalies, replace=False)
@@ -60,7 +59,6 @@ vib  = vib_normal.copy()
 temp[anomaly_mask] += rng.uniform(20, 40, n_anomalies)     # +20..+40 deg
 vib[anomaly_mask]  += rng.uniform(1.5, 3.0, n_anomalies)   # +1.5..+3g
 
-# Stack into 2-channel signal: (N, 2)
 signal = np.stack([temp, vib], axis=1).astype(np.float32)
 
 # Normalise using only normal-data statistics
@@ -87,7 +85,6 @@ def make_windows(data, mask, window_len):
 X_all, labels_all = make_windows(signal_norm, anomaly_mask, WINDOW)
 print(f"[OK] Windows: {X_all.shape}  anomalous windows: {labels_all.sum()}")
 
-# Use only NORMAL windows for training
 normal_windows = X_all[labels_all == 0]
 anom_windows   = X_all[labels_all == 1]
 print(f"[OK] Normal windows: {len(normal_windows)}  Anomaly windows: {len(anom_windows)}")
@@ -106,21 +103,17 @@ class ConvAutoencoder(nn.Module):
     """
     def __init__(self):
         super().__init__()
-        # Encoder
         self.enc1 = nn.Conv1d(2,  8,  kernel_size=3, stride=2, padding=1)   # ->16
         self.enc2 = nn.Conv1d(8,  16, kernel_size=3, stride=2, padding=1)   # ->8
         self.bn_e1 = nn.BatchNorm1d(8)
         self.bn_e2 = nn.BatchNorm1d(16)
-        # Decoder
         self.dec1 = nn.ConvTranspose1d(16, 8, kernel_size=4, stride=2, padding=1)  # ->16
         self.dec2 = nn.ConvTranspose1d(8,  2, kernel_size=4, stride=2, padding=1)  # ->32
         self.bn_d1 = nn.BatchNorm1d(8)
 
     def forward(self, x):
-        # Encode
         z = torch.relu(self.bn_e1(self.enc1(x)))
         z = torch.relu(self.bn_e2(self.enc2(z)))
-        # Decode
         z = torch.relu(self.bn_d1(self.dec1(z)))
         return self.dec2(z)   # (B, 2, 32) reconstruction
 
@@ -162,17 +155,14 @@ def recon_error(windows_np):
         errors = ((t_in - t_out) ** 2).mean(dim=(1, 2)).numpy()
     return errors
 
-# Errors on ALL normal windows (to set threshold)
 train_errors = recon_error(normal_windows)
-threshold    = np.percentile(train_errors, 95)
+threshold    = np.percentile(train_errors, 95)   # 95th pct sets the anomaly cutoff
 print(f"\n[OK] Threshold (95th pct of training errors): {threshold:.5f}")
 
-# Errors on full dataset
 all_errors = recon_error(X_all)
 predictions = (all_errors > threshold).astype(int)
 true_labels = labels_all.astype(int)
 
-# Precision / recall
 tp = int(((predictions == 1) & (true_labels == 1)).sum())
 fp = int(((predictions == 1) & (true_labels == 0)).sum())
 fn = int(((predictions == 0) & (true_labels == 1)).sum())
@@ -187,7 +177,6 @@ print(f"     TP={tp}  FP={fp}  FN={fn}")
 
 # ── 6. Plots ───────────────────────────────────────────────────────────────────
 if matplotlib_available:
-    # Reconstruct the full normalised temperature signal for plotting
     all_recon = []
     model.eval()
     with torch.no_grad():
@@ -196,7 +185,6 @@ if matplotlib_available:
         all_recon = t_out[:, 0, -1].numpy()   # last timestep, channel 0 (temp)
 
     # Align: each window's reconstruction refers to timestep i+WINDOW-1
-    win_starts = np.arange(len(X_all))
     plot_len   = min(500, len(X_all))
     xs         = np.arange(plot_len)
     actual_temp_norm = signal_norm[WINDOW - 1: WINDOW - 1 + plot_len, 0]
@@ -225,7 +213,6 @@ if matplotlib_available:
 
     axes[3].fill_between(xs, 0, anom_flags.astype(float),
                          color="red", alpha=0.6, label="Predicted anomaly")
-    # Also show true anomaly region (windows where any anomaly exists)
     true_anom_plot = true_labels[:plot_len].astype(float)
     axes[3].fill_between(xs, 0, true_anom_plot,
                          color="blue", alpha=0.3, label="True anomaly")

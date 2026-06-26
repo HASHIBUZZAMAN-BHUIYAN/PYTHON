@@ -80,7 +80,6 @@ def cast_ray(pos, dr, dc, world, occ, max_r):
             break
         else:
             free_cells.append((r, c))
-    # Log-odds style update (simplified)
     for fr, fc in free_cells:
         OCC[fr, fc] = max(0.0, OCC[fr, fc] - FREE_DEC)
     if hit:
@@ -101,7 +100,6 @@ def move(pos, world, occ):
                 continue
             nr, nc = r + dr, c + dc
             if 0 <= nr < ROWS and 0 <= nc < COLS and world[nr, nc] == 0:
-                # Prefer cells with high occupancy uncertainty (near 0.5)
                 uncertainty = 1.0 - abs(occ[nr, nc] - 0.5) * 2
                 candidates.append(((nr, nc), uncertainty + rng.uniform(0, 0.2)))
     if not candidates:

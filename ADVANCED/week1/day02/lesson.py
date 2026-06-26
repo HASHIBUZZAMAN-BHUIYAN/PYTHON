@@ -64,7 +64,6 @@ print(df_missing.fillna(df_missing.mean(numeric_only=True)))
 grouped = df.groupby("city")["salary"].agg(["mean","min","max","count"])
 print(grouped)
 
-# Multiple aggregations
 print(df.groupby("city").agg(
     avg_salary=("salary","mean"),
     avg_score=("score","mean"),

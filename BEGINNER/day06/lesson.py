@@ -14,16 +14,16 @@ print(fruits[1:4])    # ['banana', 'cherry', 'date']
 print(fruits[::-1])   # reversed copy
 
 # ─── 3. MUTATING LISTS ───────────────────────────────────────────────────────
-fruits[1] = "blueberry"   # replace
+fruits[1] = "blueberry"
 print(fruits)
 
 # ─── 4. LIST METHODS ─────────────────────────────────────────────────────────
 numbers = [3, 1, 4, 1, 5, 9, 2, 6]
 
-numbers.append(7)          # add to end
+numbers.append(7)
 print(numbers)
 
-numbers.insert(0, 0)       # insert at index 0
+numbers.insert(0, 0)
 print(numbers)
 
 numbers.remove(1)          # remove first occurrence of value 1
@@ -32,20 +32,20 @@ print(numbers)
 popped = numbers.pop()     # remove & return last element
 print(popped, numbers)
 
-numbers.sort()             # sort in place
+numbers.sort()
 print(numbers)
 
-numbers.sort(reverse=True) # descending
+numbers.sort(reverse=True)
 print(numbers)
 
-copy = numbers.copy()      # shallow copy
+copy = numbers.copy()
 copy.reverse()
 print(copy, numbers)       # copy reversed, original unchanged
 
-print(numbers.count(1))    # count occurrences
-print(numbers.index(9))    # index of value 9
+print(numbers.count(1))
+print(numbers.index(9))
 
-numbers.clear()            # empty the list
+numbers.clear()
 print(numbers)
 
 # ─── 5. LIST FUNCTIONS ───────────────────────────────────────────────────────
