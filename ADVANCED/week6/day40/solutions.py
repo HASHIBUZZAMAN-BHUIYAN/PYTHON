@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-# Ex 1
 print("=== Ex 1: BLEU-1 Metric ===")
 def bleu1(reference,hypothesis):
     ref=set(reference.lower().split()); hyp=hypothesis.lower().split()
@@ -20,7 +19,6 @@ for ref,hyp,_ in CASES:
     b=bleu1(ref,hyp); c=any(w in hyp.lower() for w in ref.lower().split())
     print(f"  BLEU1={b:.2f}  contains={c}  hyp='{hyp[:40]}'")
 
-# Ex 2
 print("\n=== Ex 2: Adversarial Inputs ===")
 TOXIC=[r"\bhow to (make|build|create)\s+(bomb|weapon|drug)"]
 def check(text):
@@ -40,7 +38,6 @@ def normalize(t): return re.sub(r"[^a-z0-9\s]","",t.lower())
 improved=[t for t in adversarial if not check(normalize(t))]
 print(f"  After normalization bypass: {len(improved)}/{len(adversarial)}")
 
-# Ex 3
 print("\n=== Ex 3: Response Schema Validator ===")
 SCHEMA={"answer":str,"confidence":float,"source":str}
 responses=['{"answer":"Paris","confidence":0.95,"source":"wiki"}',
@@ -60,7 +57,6 @@ for raw in responses:
         print(f"  {'OK' if not errs else 'ERR'}: {raw[:50]}  → {errs or 'valid'}")
     except json.JSONDecodeError as e: print(f"  ERR: Not JSON: {e}")
 
-# Ex 4
 print("\n=== Ex 4: Latency Benchmark ===")
 KB={"capital of france":"Paris","python":"Python language","ml":"Machine learning","2+2":"4"}
 def agent(q):
@@ -74,7 +70,6 @@ for _ in range(100):
 lat=np.array(latencies)
 print(f"  mean={lat.mean():.2f}ms  median={np.median(lat):.2f}ms  p95={np.percentile(lat,95):.2f}ms  p99={np.percentile(lat,99):.2f}ms")
 
-# Ex 5
 print("\n=== Ex 5: Reliability Score ===")
 ANSWERS=["Paris is the capital.","Paris.","The capital is Paris.","France capital: Paris."]
 def noisy_agent(q,seed=None):

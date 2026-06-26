@@ -140,7 +140,6 @@ print("\n" + "─" * 60)
 print("SEMANTIC NEIGHBORHOOD EXPLORATION")
 print("─" * 60)
 
-# Which words from vocab are closest to "learning"?
 seed_words = ["learning", "data", "code"]
 for seed in seed_words:
     if seed not in model.wv:

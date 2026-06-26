@@ -14,7 +14,6 @@ def classify_intent(text):
     if not sc: return "unknown",0.0
     best=max(sc,key=sc.get); return best,sc[best]/sum(sc.values())
 
-# Ex 1
 print("=== Ex 1: Slot Filling ===")
 def slot_filling(text):
     text_l=text.lower(); slots={}
@@ -35,7 +34,6 @@ def slot_filling(text):
 for q in ["what is the square root of 81?","what is 15% of 200?","add 17 and 25"]:
     print(f"  '{q}' → {slot_filling(q)}")
 
-# Ex 2
 print("\n=== Ex 2: Conversation Memory ===")
 class ConversationMemory:
     def __init__(self,max_turns=10):
@@ -59,7 +57,6 @@ mem.remember("Who is Einstein?","Albert Einstein was a physicist")
 print(f"  Context(2):\n{mem.context(2)}")
 print(f"  Relevant('who is a physicist'): {mem.relevant('who is a physicist')}")
 
-# Ex 3
 print("\n=== Ex 3: Retry + Fallback ===")
 def safe_agent(query,max_retries=2):
     intent,_=classify_intent(query)
@@ -82,7 +79,6 @@ for q in ["add 5 and 3","divide 10 by 0","who invented Python?"]:
     result,source,attempts=safe_agent(q)
     print(f"  '{q[:35]}'  →  {result}  [{source}, attempts={attempts}]")
 
-# Ex 4
 print("\n=== Ex 4: Evaluation Harness ===")
 TEST_SUITE=[("Hello","greeting"),("What is 5 plus 3","calculation"),
             ("Search for Python tutorials","search"),("Bye","farewell"),
@@ -98,7 +94,6 @@ import numpy as np
 print(f"\n  Accuracy: {correct}/{len(TEST_SUITE)} = {correct/len(TEST_SUITE):.0%}")
 print(f"  Latency: mean={np.mean(latencies):.3f}ms  p95={np.percentile(latencies,95):.3f}ms")
 
-# Ex 5
 print("\n=== Ex 5: Full Integration (Non-interactive) ===")
 import re as _re
 PII_PATS={"email":r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+","ssn":r"\b\d{3}-\d{2}-\d{4}\b"}

@@ -50,12 +50,10 @@ try:
 
     tokens = nltk.word_tokenize(TEXT)
     pos_tags = nltk.pos_tag(tokens)
-    # Show first 15 tokens with POS
     print("  First 15 tokens with POS tags:")
     for word, tag in pos_tags[:15]:
         print(f"    {word:<20} {tag}")
 
-    # POS distribution
     from collections import Counter
     tag_dist = Counter(tag for _, tag in pos_tags)
     top_tags = tag_dist.most_common(6)

@@ -78,9 +78,7 @@ def extract_keywords(doc_dict: dict, top_k: int = 8) -> dict:
 
     results = {}
     for i, title in enumerate(titles):
-        # Get TF-IDF scores for this document
         scores = tfidf_matrix[i].toarray().flatten()
-        # Sort by score descending
         top_indices = np.argsort(scores)[-top_k:][::-1]
         keywords = [(feature_names[idx], round(float(scores[idx]), 4))
                     for idx in top_indices if scores[idx] > 0]

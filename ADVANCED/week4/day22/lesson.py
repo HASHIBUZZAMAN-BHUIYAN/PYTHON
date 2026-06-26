@@ -37,11 +37,9 @@ print("=" * 60)
 
 text = "Hello! I'm learning NLP in Python 3.11 — it's amazing, isn't it?"
 
-# Simple split (naive)
 tokens_split = text.split()
 print("split()  :", tokens_split[:8], "...")
 
-# NLTK word_tokenize (handles contractions, punctuation)
 tokens_nltk = word_tokenize(text)
 print("word_tokenize:", tokens_nltk)
 
@@ -86,7 +84,6 @@ words = ["running", "ran", "runs", "easily", "fairly", "studies",
 print(f"{'Word':<12} {'Stem':<12} {'Lemma':<12}")
 print("-" * 36)
 for w in words:
-    stem  = stemmer.lemmatize(w)          # PorterStemmer.stem()
     stem  = stemmer.stem(w)
     lemma = lemmatizer.lemmatize(w, pos='v')  # verb form
     print(f"{w:<12} {stem:<12} {lemma:<12}")
@@ -115,12 +112,12 @@ print("=" * 60)
 
 def clean_text(text: str) -> str:
     """Standard text cleaning pipeline."""
-    text = text.lower()                              # lowercase
-    text = re.sub(r'https?://\S+', '', text)         # remove URLs
-    text = re.sub(r'@\w+', '', text)                 # remove @mentions
-    text = re.sub(r'#\w+', '', text)                 # remove #hashtags
-    text = re.sub(r'[^a-z\s]', '', text)             # keep only letters
-    text = re.sub(r'\s+', ' ', text).strip()         # collapse whitespace
+    text = text.lower()
+    text = re.sub(r'https?://\S+', '', text)
+    text = re.sub(r'@\w+', '', text)
+    text = re.sub(r'#\w+', '', text)
+    text = re.sub(r'[^a-z\s]', '', text)
+    text = re.sub(r'\s+', ' ', text).strip()
     return text
 
 raw_tweets = [
@@ -151,12 +148,10 @@ corpus = [
 
 def build_bow(corpus):
     """Build Bag-of-Words vocabulary and document-term matrix."""
-    # Step 1: tokenize and build vocabulary
     tokenized = [doc.lower().split() for doc in corpus]
     vocab = sorted(set(word for doc in tokenized for word in doc))
     word2idx = {w: i for i, w in enumerate(vocab)}
 
-    # Step 2: build document-term matrix
     dtm = []
     for tokens in tokenized:
         counts = Counter(tokens)
@@ -233,19 +228,16 @@ print("\n" + "=" * 60)
 print("7. TF-IDF WITH SKLEARN (CountVectorizer & TfidfVectorizer)")
 print("=" * 60)
 
-# CountVectorizer = Bag of Words
 cv = CountVectorizer()
 X_count = cv.fit_transform(corpus)
 print("CountVectorizer feature names:", cv.get_feature_names_out()[:10])
 print("Shape:", X_count.shape)
 
-# TfidfVectorizer = TF-IDF
 tv = TfidfVectorizer()
 X_tfidf = tv.fit_transform(corpus)
 print("\nTfidfVectorizer feature names:", tv.get_feature_names_out()[:10])
 print("Shape:", X_tfidf.shape)
 
-# TF-IDF with n-grams
 tv_bigram = TfidfVectorizer(ngram_range=(1, 2), max_features=20)
 X_bigram = tv_bigram.fit_transform(corpus)
 print("\nBigram TF-IDF features:", tv_bigram.get_feature_names_out())

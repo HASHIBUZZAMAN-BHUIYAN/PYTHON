@@ -11,12 +11,9 @@ from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
 
-# NOTE: ~300 MB RAM, ~5-8 min on CPU
-# Scale up comment: set N_TRAIN=60000, EPOCHS=30 for full training (GPU recommended)
-
 torch.manual_seed(42); np.random.seed(42)
 
-N_TRAIN = 5000   # keep small for CPU; increase if you want better accuracy
+N_TRAIN = 5000
 EPOCHS  = 10
 BATCH   = 64
 LR      = 1e-3
@@ -54,21 +51,20 @@ train_loader = DataLoader(TensorDataset(X_tr_t, y_tr_t), BATCH, shuffle=True)
 class MNIST_CNN(nn.Module):
     def __init__(self):
         super().__init__()
-        # 28×28 → Conv(1→16,3,p=1) → 28×28 → Pool → 14×14
+        # 28×28 → 14×14
         self.block1 = nn.Sequential(
             nn.Conv2d(1, 16, 3, padding=1), nn.BatchNorm2d(16), nn.ReLU(), nn.MaxPool2d(2)
         )
-        # 14×14 → Conv(16→32,3,p=1) → 14×14 → Pool → 7×7
+        # 14×14 → 7×7
         self.block2 = nn.Sequential(
             nn.Conv2d(16, 32, 3, padding=1), nn.BatchNorm2d(32), nn.ReLU(), nn.MaxPool2d(2)
         )
-        # 7×7 → Conv(32→64,3,p=1) → 7×7
         self.block3 = nn.Sequential(
             nn.Conv2d(32, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU()
         )
         self.classifier = nn.Sequential(
-            nn.AdaptiveAvgPool2d(1),         # → (batch, 64, 1, 1)
-            nn.Flatten(),                    # → (batch, 64)
+            nn.AdaptiveAvgPool2d(1),
+            nn.Flatten(),
             nn.Linear(64, 128), nn.ReLU(), nn.Dropout(0.3),
             nn.Linear(128, 10)
         )

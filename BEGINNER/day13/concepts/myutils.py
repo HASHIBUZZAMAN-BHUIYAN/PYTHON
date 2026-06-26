@@ -19,6 +19,6 @@ def clamp(value, lo, hi):
 if __name__ == "__main__":
     # This only runs when the file is executed directly, not when imported.
     print("myutils self-test:")
-    print(celsius_to_fahrenheit(0))    # 32
-    print(is_palindrome("racecar"))    # True
-    print(clamp(15, 0, 10))           # 10
+    print(celsius_to_fahrenheit(0))
+    print(is_palindrome("racecar"))
+    print(clamp(15, 0, 10))

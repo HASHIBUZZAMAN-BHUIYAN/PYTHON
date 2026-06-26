@@ -56,7 +56,6 @@ all_texts += [doc for doc, _ in TEST_DOCS]
 vec = TfidfVectorizer(max_features=1000, ngram_range=(1,2))
 vec.fit(all_texts)
 
-# Compute category centroids
 cat_centroids = {}
 for cat, sents in CATEGORIES.items():
     vecs = vec.transform(sents).toarray()
@@ -73,7 +72,6 @@ for doc, true_label in TEST_DOCS:
                           (np.linalg.norm(doc_vec)*np.linalg.norm(centroid)+1e-9))
                for cat, centroid in cat_centroids.items()}
     pred = max(sims, key=sims.get)
-    # check partial match (true label may contain "/" for dual-category docs)
     match = "✓" if pred in true_label else "✗"
     if pred in true_label: correct += 1
     print(f"  {match} {doc[:57]:<57}  {true_label:<20}  {pred}")

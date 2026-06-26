@@ -27,7 +27,6 @@ def bfs(g,start,goal,rows,cols):
                 visited.add((nr,nc)); q.append(path+[(nr,nc)])
     return [],explored
 
-# Ex 1
 print("=== Ex 1: A* vs BFS ===")
 def astar(g,start,goal,rows,cols):
     def h(a,b): return abs(a[0]-b[0])+abs(a[1]-b[1])
@@ -52,7 +51,6 @@ print(f"  BFS: path={len(bfs_path)} explored={bfs_exp}")
 print(f"  A*:  path={len(ast_path)} explored={ast_exp}")
 print(f"  A* explored {(ast_exp/max(bfs_exp,1)):.0%} of BFS nodes\n")
 
-# Ex 2
 print("=== Ex 2: Sensor Noise ===")
 import numpy as np
 actual_positions=[(0,0),(1,1),(2,2),(3,3),(4,4)]
@@ -73,7 +71,6 @@ for i,pos in enumerate(actual_positions):
     history.append(sm)
     print(f"  {str(pos):<12}  {str(noisy):<12}  ({sm[0]:.1f},{sm[1]:.1f})")
 
-# Ex 3
 print("\n=== Ex 3: Dynamic Obstacles ===")
 class SimpleEnv:
     def __init__(self,seed=0):
@@ -107,7 +104,6 @@ for ep in range(50):
     results.append(reached)
 print(f"  Reached goal: {sum(results)}/50 episodes ({sum(results)/50:.0%})")
 
-# Ex 4
 print("\n=== Ex 4: Coverage Agent (Lawnmower) ===")
 def boustrophedon_path(rows,cols,walls):
     path=[]; direction=1
@@ -123,7 +119,6 @@ total_non_wall=rows*cols-len(walls)
 coverage_50=len(path[:50])
 print(f"  Total non-wall cells: {total_non_wall}  Visited in 50 steps: {coverage_50}  Coverage: {coverage_50/total_non_wall:.0%}")
 
-# Ex 5
 print("\n=== Ex 5: Multi-objective Reward ===")
 class Env2:
     def __init__(self,seed=0):

@@ -110,14 +110,12 @@ def make_sentence(template):
         adj = random.choice(ADJECTIVES),
     )
 
-# Generate ~500 sentences
 corpus_sentences = []
 for _ in range(500):
     tmpl = random.choice(sentence_templates)
     sentence = make_sentence(tmpl)
     corpus_sentences.append(sentence)
 
-# Tokenize
 tokenized_corpus = [s.lower().split() for s in corpus_sentences]
 
 print(f"Generated {len(tokenized_corpus)} sentences")
@@ -125,7 +123,6 @@ print("Sample sentences:")
 for s in corpus_sentences[:5]:
     print(f"  {s}")
 
-# Vocabulary size
 vocab = set(w for sent in tokenized_corpus for w in sent)
 print(f"\nVocabulary size: {len(vocab)} unique words")
 
@@ -202,7 +199,6 @@ analogies = [
 
 for pos1, neg1, pos2, expected in analogies:
     try:
-        # word2vec analogy: pos1 - neg1 + pos2
         results = model.wv.most_similar(
             positive=[pos1, pos2],
             negative=[neg1],
@@ -228,21 +224,17 @@ print("\n" + "=" * 60)
 print("6. PCA VISUALIZATION (saving to embeddings_pca.png)")
 print("=" * 60)
 
-# Select 30-40 words to visualize
 viz_words = [w for w in ANIMALS + ROYALTY + GENDER + TECH[:4] + PLACES[:4]
              if w in model.wv][:35]
 
-# Get embeddings
 vectors = np.array([model.wv[w] for w in viz_words])
 
-# Reduce to 2D with PCA
 pca = PCA(n_components=2, random_state=42)
 coords_2d = pca.fit_transform(vectors)
 explained = pca.explained_variance_ratio_
 
 print(f"PCA explained variance: {explained[0]:.1%} + {explained[1]:.1%} = {sum(explained):.1%}")
 
-# Color-code by category
 colors = []
 labels_cat = []
 category_map = {
@@ -264,7 +256,6 @@ for w in viz_words:
         colors.append("gray")
         labels_cat.append("other")
 
-# Plot
 fig, ax = plt.subplots(figsize=(12, 8))
 ax.scatter(coords_2d[:, 0], coords_2d[:, 1], c=colors, s=100, alpha=0.7)
 
@@ -273,7 +264,6 @@ for i, word in enumerate(viz_words):
                 fontsize=9, ha='left', va='bottom',
                 xytext=(4, 4), textcoords='offset points')
 
-# Legend
 from matplotlib.patches import Patch
 legend_elements = [Patch(facecolor=c, label=cat)
                    for cat, (_, c) in category_map.items()]

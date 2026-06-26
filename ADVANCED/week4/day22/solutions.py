@@ -31,9 +31,9 @@ def preprocess(text: str) -> list:
     stop_words = set(stopwords.words('english'))
 
     text = text.lower()
-    text = re.sub(r'https?://\S+', '', text)         # remove URLs
-    text = re.sub(r'[^a-z\s]', '', text)             # keep only letters
-    tokens = word_tokenize(text)                      # tokenize
+    text = re.sub(r'https?://\S+', '', text)
+    text = re.sub(r'[^a-z\s]', '', text)
+    tokens = word_tokenize(text)
     tokens = [t for t in tokens if t not in stop_words and t.isalpha()]
     tokens = [lemmatizer.lemmatize(t, pos='v') for t in tokens]
     return tokens
@@ -94,11 +94,9 @@ class SimpleTfidfVectorizer:
         tokenized = [doc.lower().split() for doc in corpus]
         N = len(tokenized)
 
-        # Build vocabulary
         all_words = sorted(set(w for doc in tokenized for w in doc))
         self.vocab_ = all_words
 
-        # Document frequency
         df = defaultdict(int)
         for tokens in tokenized:
             for w in set(tokens):
@@ -107,7 +105,6 @@ class SimpleTfidfVectorizer:
         # IDF (smoothed, sklearn-style)
         self.idf_ = {w: math.log((N + 1) / (df[w] + 1)) + 1 for w in all_words}
 
-        # Build TF-IDF matrix
         matrix = []
         for tokens in tokenized:
             total = len(tokens)

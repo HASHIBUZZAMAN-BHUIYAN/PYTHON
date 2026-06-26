@@ -65,8 +65,7 @@ class BankAccount:
 
 acct = BankAccount("Alice", 1000)
 acct.deposit(500)
-print(acct.balance)          # 1500 via property
-# print(acct.__balance)      # AttributeError — name-mangled
+print(acct.balance)
 print(acct._BankAccount__balance)  # works but "don't do this"
 
 # ─── 5. DUNDER METHODS ───────────────────────────────────────────────────────
@@ -85,12 +84,12 @@ class Vector:
 
 v1 = Vector(1, 2)
 v2 = Vector(3, 4)
-print(v1 + v2)   # Vector(4, 6)
-print(v2 - v1)   # Vector(2, 2)
-print(v1 * 3)    # Vector(3, 6)
-print(3 * v1)    # Vector(3, 6)
-print(abs(v2))   # 5.0
-print(v1 == Vector(1, 2))  # True
+print(v1 + v2)
+print(v2 - v1)
+print(v1 * 3)
+print(3 * v1)
+print(abs(v2))
+print(v1 == Vector(1, 2))
 
 # ─── 6. ABSTRACT BASE CLASSES (intro) ────────────────────────────────────────
 from abc import ABC, abstractmethod

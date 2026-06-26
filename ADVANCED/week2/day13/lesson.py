@@ -114,7 +114,6 @@ print(f"Total params: {total:,}  Trainable: {trainable:,} ({100*trainable/total:
 
 # ─── 4. TRAINING THE HEAD ────────────────────────────────────────────────────
 print("\n=== 4. Training Classification Head ===")
-# Only optimize classifier params (backbone is frozen)
 optimizer = optim.Adam(backbone.classifier.parameters(), lr=1e-3)
 criterion = nn.CrossEntropyLoss()
 loader    = DataLoader(TensorDataset(X_tr_t, y_tr_t), batch_size=32, shuffle=True)

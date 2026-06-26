@@ -39,7 +39,6 @@ class ConversationBuffer:
         return out
 
     def __len__(self):
-        # Number of messages (pairs * 2)
         return len(self._pairs) * 2
 
 

@@ -10,7 +10,7 @@ import datetime
 print(math.pi)
 print(math.sqrt(16))
 print(math.floor(3.7), math.ceil(3.2))
-print(os.getcwd())        # current working directory
+print(os.getcwd())
 print(sys.version)
 print(random.randint(1, 10))
 print(datetime.date.today())
@@ -19,7 +19,7 @@ print(datetime.date.today())
 from math import sqrt, pi
 from random import choice, shuffle
 
-print(sqrt(25))    # no math. prefix needed
+print(sqrt(25))
 print(choice(["red", "green", "blue"]))
 
 # ─── 3. ALIASING ─────────────────────────────────────────────────────────────
@@ -30,11 +30,11 @@ today = dt.date.today()
 print(today)
 
 counter = col.Counter("aabbccca")
-print(counter)     # Counter({'a':3, 'c':3, 'b':2})
+print(counter)
 
 # ─── 4. EXPLORING A MODULE ───────────────────────────────────────────────────
-print(dir(math))          # all names in math
-print(help(math.gcd))     # built-in help
+print(dir(math))
+print(help(math.gcd))
 
 # ─── 5. CREATING YOUR OWN MODULE ─────────────────────────────────────────────
 # See concepts/myutils.py  — a module we import below
@@ -52,7 +52,7 @@ print(myutils.greet("Hashib"))
 # When it's imported, __name__ == the module name.
 # This lets you have code that only runs when the file is the entry point,
 # not when it's imported as a library.
-print(__name__)   # __main__ (because we're running this file directly)
+print(__name__)
 
 # ─── 7. PACKAGES ─────────────────────────────────────────────────────────────
 # A package is a folder with an __init__.py file.

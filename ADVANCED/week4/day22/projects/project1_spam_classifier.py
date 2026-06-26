@@ -78,21 +78,19 @@ def fill_template(tmpl):
             .replace("{url}",   f"http://bit.ly/{random.randint(10000,99999)}")
             .replace("{code}",  f"CODE{random.randint(100,999)}"))
 
-# Generate 100 spam + 100 ham messages
 messages = []
 labels   = []
 
 for _ in range(100):
     tmpl = random.choice(SPAM_TEMPLATES)
     messages.append(fill_template(tmpl))
-    labels.append(1)   # spam
+    labels.append(1)
 
 for _ in range(100):
     tmpl = random.choice(HAM_TEMPLATES)
     messages.append(fill_template(tmpl))
-    labels.append(0)   # ham
+    labels.append(0)
 
-# Shuffle
 combined = list(zip(messages, labels))
 random.shuffle(combined)
 messages, labels = zip(*combined)
@@ -147,7 +145,6 @@ print(classification_report(y_test, y_pred, target_names=["Ham", "Spam"]))
 
 # ─── Top Spam-Indicating Words ──────────────────────────────────────────────
 feature_names = vectorizer.get_feature_names_out()
-# Positive coef = spam, negative = ham
 coef = clf.coef_[0]
 top_spam_idx = np.argsort(coef)[-10:][::-1]
 top_ham_idx  = np.argsort(coef)[:10]

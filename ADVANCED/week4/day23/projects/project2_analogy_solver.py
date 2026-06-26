@@ -117,13 +117,11 @@ def solve_analogy(model, word_a, word_b, word_c, expected=None, topn=5):
     Returns:
         list of (word, score) tuples, or None on failure
     """
-    # Check all words are in vocabulary
     missing = [w for w in [word_a, word_b, word_c] if w not in model.wv]
     if missing:
         return None, f"Words not in vocabulary: {missing}"
 
     try:
-        # word_b - word_a + word_c
         results = model.wv.most_similar(
             positive=[word_b, word_c],
             negative=[word_a],

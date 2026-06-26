@@ -9,7 +9,6 @@ from collections import Counter
 import matplotlib; matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-# Two different writing styles
 FICTION = """
 The old lighthouse keeper watched the stormy sea with tired, worried eyes.
 Dark clouds gathered menacingly above the rocky shore while howling winds
@@ -26,7 +25,6 @@ structured array and subsequently written to the output file.
 The program terminates after releasing all allocated resources.
 """
 
-# ─── Simple rule-based POS assignment ─────────────────────────────────────────
 ADJECTIVES  = {"old","tired","worried","dark","stormy","rocky","ancient","narrow",
                "creaking","brilliant","terrible","lost","safe","lost",
                "recursive","structured","main","allocated","simple","complex"}

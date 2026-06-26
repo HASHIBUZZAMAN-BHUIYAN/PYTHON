@@ -7,7 +7,6 @@ class Agent:
         self.name=name; self.role=role; self.fn=fn
     def respond(self,ctx=""): return self.fn(ctx)
 
-# Ex 1
 print("=== Ex 1: Star Topology ===")
 class StarOrchestrator:
     def __init__(self,coordinator,workers):
@@ -27,7 +26,6 @@ workers=[Agent("W1","NLP",  lambda p: f"NLP analysis: sentiment=positive"),
 coord=Agent("Coord","Merger",lambda p: f"MERGED REPORT: {p[:80]}")
 star=StarOrchestrator(coord,workers); star.run("Analyze this product review text")
 
-# Ex 2
 print("\n=== Ex 2: Escalation Chain ===")
 class EscalationChain:
     def __init__(self,agents,threshold=0.5):
@@ -46,7 +44,6 @@ chain=EscalationChain([Agent("Junior","L1",lambda p:"Basic answer: "+p[:20]),
                        Agent("Expert","L3",lambda p:"Expert answer: "+p[:30])])
 ans,who=chain.run("What is the capital of Bhutan?"); print(f"  Final: {who} answered\n")
 
-# Ex 3
 print("=== Ex 3: Collaborative Writing ===")
 def outliner(p):  return "1. Intro 2. History 3. Applications 4. Conclusion"
 def writer(p):    return "1. AI is transforming industries. 2. From Turing 1950... 3. Healthcare, finance, NLP... 4. Balanced adoption needed."
@@ -58,7 +55,6 @@ text=p="Explain AI"
 for ag in pipeline:
     text=ag.respond(text); print(f"  [{ag.name}]: {text[:80]}")
 
-# Ex 4
 print("\n=== Ex 4: Weighted Voting ===")
 LEXICON={"good","great","excellent","love","amazing"}
 def lex(t): return "POS" if any(w in t.lower() for w in LEXICON) else "NEG"
@@ -75,7 +71,6 @@ for text in ["This is a great product! I absolutely love it.",
     decision="POS" if pos_score>=neg_score else "NEG"
     print(f"  '{text[:40]}'  votes={votes}  decision={decision}")
 
-# Ex 5
 print("\n=== Ex 5: Supervised Pipeline ===")
 class Supervised:
     def __init__(self,agents):

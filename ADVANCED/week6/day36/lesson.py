@@ -112,7 +112,6 @@ class KeyValueMemory:
         return len(self._store)
 
 
-# Demo — use a temp file in the current directory
 kv = KeyValueMemory("lesson_demo_memory.json")
 print(kv.store("capital_of_france", "Paris"))
 print(kv.store("pi", "3.14159"))
@@ -121,7 +120,6 @@ print(kv.recall("capital_of_france"))
 print(kv.recall("unknown_key"))
 print(f"All facts ({len(kv)}):", kv.list_all())
 print(kv.delete("pi"))
-# Clean up demo file
 try:
     os.remove("lesson_demo_memory.json")
 except FileNotFoundError:

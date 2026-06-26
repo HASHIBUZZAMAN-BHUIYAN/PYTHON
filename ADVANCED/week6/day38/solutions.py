@@ -5,7 +5,6 @@ from collections import defaultdict, deque
 
 class ToolError(Exception): pass
 
-# Ex 1
 print("=== Ex 1: Tool Timeout ===")
 def with_timeout(fn, timeout_sec):
     @functools.wraps(fn)
@@ -27,7 +26,6 @@ print(f"  fast_timeout(5): {fast_timeout(5)}")
 try: slow_timeout(5)
 except ToolError as e: print(f"  slow_timeout: {e}")
 
-# Ex 2
 print("\n=== Ex 2: Rate Limiter ===")
 def with_rate_limit(fn, max_calls=3, window_sec=60):
     calls = deque()
@@ -45,7 +43,6 @@ for i in range(5):
     try: print(f"  Call {i+1}: {limited(i)}")
     except ToolError as e: print(f"  Call {i+1}: {e}")
 
-# Ex 3
 print("\n=== Ex 3: Tool Composition ===")
 def compose(tool_a, tool_b):
     def composed(*a, **kw):
@@ -60,7 +57,6 @@ process= compose(clean, shorten)
 for text in ["  Hello World This Is A Very Long String  ", "SHORT"]:
     print(f"  '{text[:30]}' → '{process(text)}'")
 
-# Ex 4
 print("\n=== Ex 4: Parallel Tool Calls ===")
 def run_parallel(tasks):
     results={}
@@ -79,7 +75,6 @@ t0=time.time(); res=run_parallel(tasks); elapsed=time.time()-t0
 for name,r in res.items(): print(f"  {name}: {r}")
 print(f"  Parallel time: {elapsed:.3f}s (both ran concurrently)")
 
-# Ex 5
 print("\n=== Ex 5: Tool Versioning ===")
 class VersionedRegistry:
     def __init__(self): self._tools={}
