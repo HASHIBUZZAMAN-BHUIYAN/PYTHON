@@ -63,7 +63,6 @@ def make_stop_sign(rng_local):
         angle = math.radians(k * 45 + 22.5)
         pts.append((cx + r * math.cos(angle), cy + r * math.sin(angle)))
     draw.polygon(pts, fill=(210, 30, 30), outline=(255, 255, 255))
-    # White inner text strip (simplified)
     inner_r = r - 6
     inner_pts = [(cx + inner_r * math.cos(math.radians(k*45+22.5)),
                   cy + inner_r * math.sin(math.radians(k*45+22.5))) for k in range(8)]
@@ -78,10 +77,8 @@ def make_yield_sign(rng_local):
     top  = 10 + rand_offset(rng_local)
     bot  = IMG_SIZE - 8 + rand_offset(rng_local)
     half = 26 + rng_local.randint(-2, 2)
-    # Outer red triangle
     outer = [(cx, bot), (cx - half, top), (cx + half, top)]
     draw.polygon(outer, fill=(210, 30, 30), outline=(210, 30, 30))
-    # Inner white triangle (border effect)
     margin = 5
     inner = [(cx, bot - margin), (cx - half + margin, top + margin),
              (cx + half - margin, top + margin)]
@@ -98,7 +95,6 @@ def make_warning_sign(rng_local):
                  fill=(0, 0, 0))
     draw.ellipse([cx - r, cy - r, cx + r, cy + r],
                  fill=(255, 220, 0))
-    # Exclamation mark
     draw.rectangle([cx - 2, cy - 8, cx + 2, cy + 2], fill=(0, 0, 0))
     draw.ellipse([cx - 2, cy + 5, cx + 2, cy + 9], fill=(0, 0, 0))
     return img
@@ -112,16 +108,15 @@ def make_speed_limit_sign(rng_local):
     x0, y0, x1, y1 = cx - w//2, cy - h//2, cx + w//2, cy + h//2
     draw.rounded_rectangle([x0, y0, x1, y1], radius=4,
                             fill=(30, 80, 200), outline=(255, 255, 255))
-    # Draw a thick white horizontal bar at top for "SPEED LIMIT" label area
     draw.rectangle([x0 + 3, y0 + 3, x1 - 3, y0 + 14], fill=(255, 255, 255))
     # Draw a digit "50" crudely using rectangles
     # digit '5'
     dx, dy = cx - 9, cy - 4
-    draw.rectangle([dx, dy,      dx + 10, dy + 2],  fill=(255, 255, 255))  # top
-    draw.rectangle([dx, dy,      dx + 2,  dy + 8],  fill=(255, 255, 255))  # top-left
-    draw.rectangle([dx, dy + 6,  dx + 10, dy + 8],  fill=(255, 255, 255))  # middle
-    draw.rectangle([dx + 8, dy + 8, dx + 10, dy + 16], fill=(255, 255, 255))  # bot-right
-    draw.rectangle([dx, dy + 14, dx + 10, dy + 16], fill=(255, 255, 255))  # bottom
+    draw.rectangle([dx, dy,      dx + 10, dy + 2],  fill=(255, 255, 255))
+    draw.rectangle([dx, dy,      dx + 2,  dy + 8],  fill=(255, 255, 255))
+    draw.rectangle([dx, dy + 6,  dx + 10, dy + 8],  fill=(255, 255, 255))
+    draw.rectangle([dx + 8, dy + 8, dx + 10, dy + 16], fill=(255, 255, 255))
+    draw.rectangle([dx, dy + 14, dx + 10, dy + 16], fill=(255, 255, 255))
     # digit '0'
     dx2 = cx + 2
     draw.rectangle([dx2,     dy,      dx2 + 10, dy + 2],  fill=(255, 255, 255))
@@ -146,7 +141,6 @@ for class_idx, gen_fn in enumerate(GENERATORS):
 X = np.stack(all_images).transpose(0, 3, 1, 2)  # (N, C, H, W)
 y = np.array(all_labels, dtype=np.int64)
 
-# Shuffle
 idx = np.random.permutation(len(X))
 X, y = X[idx], y[idx]
 

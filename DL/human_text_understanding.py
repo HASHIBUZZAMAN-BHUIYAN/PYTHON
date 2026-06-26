@@ -92,7 +92,6 @@ non_urgent_msgs = [augment(random.choice(NON_URGENT_TEMPLATES), rng_local) for _
 messages = urgent_msgs + non_urgent_msgs
 labels   = [1] * 100 + [0] * 100
 
-# Shuffle together
 combined = list(zip(messages, labels))
 random.shuffle(combined)
 messages, labels = zip(*combined)
@@ -127,7 +126,6 @@ def encode(msg, max_len):
 X_enc = np.array([encode(m, MAX_LEN) for m in messages], dtype=np.int64)
 y_arr = np.array(labels, dtype=np.float32)
 
-# Train / test split (80/20)
 split = int(0.8 * len(X_enc))
 X_tr, X_te = X_enc[:split], X_enc[split:]
 y_tr, y_te = y_arr[:split], y_arr[split:]
@@ -206,7 +204,6 @@ all_labels_eval = np.array(all_labels_eval)
 test_acc = (all_preds == all_labels_eval).mean()
 print(f"\n[OK] Test accuracy: {test_acc:.3f}")
 
-# Sample predictions on a few held-out messages
 print("\nSample predictions:")
 model.eval()
 with torch.no_grad():
@@ -227,7 +224,6 @@ with torch.no_grad():
 embed_weights = model.embed.weight.detach().numpy()   # (vocab_size, embed_dim)
 norms = np.linalg.norm(embed_weights, axis=1)          # L2 norm per token
 
-# Map back from index to word
 idx2word = {v: k for k, v in vocab.items()}
 word_norms = [(idx2word.get(i, "?"), norms[i]) for i in range(len(norms))
               if i not in (PAD_IDX,)]
@@ -242,7 +238,6 @@ for word, norm_val in word_norms[:15]:
 if matplotlib_available:
     fig, axes = plt.subplots(1, 2, figsize=(12, 4))
 
-    # Loss curve
     axes[0].plot(range(1, EPOCHS + 1), train_losses, marker="o", markersize=3,
                  color="steelblue")
     axes[0].set_title("Training Loss Curve")
@@ -250,7 +245,6 @@ if matplotlib_available:
     axes[0].set_ylabel("BCE Loss")
     axes[0].grid(True, alpha=0.3)
 
-    # Top words by norm
     top_words = [w for w, _ in word_norms[:10]]
     top_norms = [n for _, n in word_norms[:10]]
     axes[1].barh(top_words[::-1], top_norms[::-1], color="salmon")

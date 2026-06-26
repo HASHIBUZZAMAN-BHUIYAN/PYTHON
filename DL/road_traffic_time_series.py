@@ -54,7 +54,6 @@ def generate_traffic(seed=42):
     is_weekday = (day_of_week < 5).astype(float)
     weekly_pattern = 200 * is_weekday + 50 * (1 - is_weekday)
 
-    # Base traffic + patterns + noise
     base = 300.0
     noise = rng.normal(0, 30, hours)
     traffic = base + daily_pattern + weekly_pattern + noise
@@ -89,7 +88,6 @@ X_te = (X_te - mean_) / std_
 y_tr = (y_tr - mean_) / std_
 y_te = (y_te - mean_) / std_
 
-# PyTorch tensors  ->  (N, seq_len, 1)
 X_tr_t = torch.from_numpy(X_tr).unsqueeze(-1)
 y_tr_t = torch.from_numpy(y_tr).unsqueeze(-1)
 X_te_t = torch.from_numpy(X_te).unsqueeze(-1)

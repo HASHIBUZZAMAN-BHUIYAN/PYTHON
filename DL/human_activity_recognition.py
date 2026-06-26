@@ -74,7 +74,6 @@ y = np.array([0]*N_CLASS + [1]*N_CLASS + [2]*N_CLASS, dtype=np.int64)
 CLASS_NAMES = ["walking", "running", "sitting"]
 print(f"[OK] Dataset shape: X={X.shape}  labels unique={np.unique(y)}")
 
-# Shuffle
 idx = rng.permutation(len(X))
 X, y = X[idx], y[idx]
 
@@ -150,13 +149,11 @@ all_labels = np.array(all_labels)
 overall_acc = (all_preds == all_labels).mean()
 print(f"\n[OK] Overall test accuracy: {overall_acc:.3f}")
 
-# Per-class accuracy
 for i, name in enumerate(CLASS_NAMES):
     mask = all_labels == i
     acc_i = (all_preds[mask] == all_labels[mask]).mean() if mask.sum() > 0 else 0.0
     print(f"  {name:8s}: {acc_i:.3f}  (n={mask.sum()})")
 
-# Confusion matrix
 n_classes = len(CLASS_NAMES)
 conf_mat = np.zeros((n_classes, n_classes), dtype=int)
 for true, pred in zip(all_labels, all_preds):

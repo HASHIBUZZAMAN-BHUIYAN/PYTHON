@@ -64,12 +64,11 @@ SEQ_LEN = 24
 N = len(traffic)
 split = int(N * 0.8)
 
-# Raw test targets (original scale) — shared denominator for all methods
-y_true = traffic[SEQ_LEN:]                  # each element = ground truth for hour i+SEQ_LEN
+y_true = traffic[SEQ_LEN:]
 y_true_tr = y_true[:split - SEQ_LEN]
 y_true_te = y_true[split - SEQ_LEN:]
 
-results = {}   # method -> dict(mae, rmse, train_time)
+results = {}
 
 # ── 2. Method 1: Naive persistence (predict last known value) ─────────────────
 t0 = time.time()
@@ -82,19 +81,8 @@ print(f"[OK] Naive  MAE={mae_naive:.2f}  RMSE={rmse_naive:.2f}  time={naive_time
 
 # ── 3. Method 2: Moving average (window=24) ───────────────────────────────────
 t0 = time.time()
-def moving_avg_forecast(series, win, n_preds):
-    preds = []
-    for i in range(n_preds):
-        start = split + i - win
-        if start < 0:
-            start = 0
-        preds.append(series[start : split + i].mean())
-    return np.array(preds)
-
-# Simpler vectorised rolling on whole series
 cumsum = np.cumsum(np.concatenate([[0], traffic]))
 roll   = (cumsum[SEQ_LEN:] - cumsum[:-SEQ_LEN]) / SEQ_LEN   # 24-step MA
-# Align: prediction for position i+1 uses MA up to position i
 ma_preds_te = roll[split - SEQ_LEN : split - SEQ_LEN + len(y_true_te)]
 ma_time = time.time() - t0
 mae_ma  = np.mean(np.abs(ma_preds_te - y_true_te))
@@ -124,9 +112,7 @@ lr_model = Ridge(alpha=1.0)
 lr_model.fit(X_feat_tr, y_feat_tr)
 lr_train_time = time.time() - t0
 
-t_pred = time.time()
 lr_preds_te = lr_model.predict(X_feat_te)
-lr_total_time = lr_train_time   # training time only for fair comparison
 mae_lr  = np.mean(np.abs(lr_preds_te - y_feat_te))
 rmse_lr = np.sqrt(np.mean((lr_preds_te - y_feat_te) ** 2))
 results["Linear Reg (lags)"] = dict(mae=mae_lr, rmse=rmse_lr, train_time=lr_train_time)
@@ -201,7 +187,6 @@ for name, d in results.items():
     print(f"{name:<22} {d['mae']:>8.2f} {d['rmse']:>8.2f} {d['train_time']:>10.3f}")
 print("-" * 62)
 
-# Discussion comments
 print("""
 Discussion
 ----------
@@ -247,7 +232,6 @@ if matplotlib_available:
     ax.legend()
     ax.grid(True, axis="y", alpha=0.3)
 
-    # Annotate bars with values
     for bar in bars1:
         ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.5,
                 f"{bar.get_height():.1f}", ha="center", va="bottom", fontsize=8)
