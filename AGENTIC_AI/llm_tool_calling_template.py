@@ -50,13 +50,13 @@ def lookup(topic: str) -> str:
 def build_tool_schema():
     lines = ["Available tools:"]
     for name, info in TOOLS.items():
-        lines.append(f"  {name}({name}_arg) — {info['description']}")
+        lines.append(f"  {name}({name}_arg) - {info['description']}")
     lines += [
         "",
         "Respond in EXACTLY one of these formats:",
         "  THOUGHT: <reasoning>",
         "  ACTION: tool_name(argument)",
-        "    — or —",
+        "    - or -",
         "  THOUGHT: <reasoning>",
         "  FINAL_ANSWER: <your final answer>",
     ]
@@ -78,7 +78,7 @@ class MockLLM:
             obs = next((m["content"] for m in reversed(messages) if "OBSERVE" in m.get("content","")), "")
             return f"THOUGHT: Calculation done.\nFINAL_ANSWER: {obs.replace('OBSERVE:','').strip()}"
         if "calculate" in full or re.search(r"\d+\s*[\+\-\*\/\^]\s*\d+", full):
-            m = re.search(r"([\d\s\+\-\*\/\.\^\(\)]+)", full)
+            m = re.search(r"(\d[\d\s\+\-\*\/\.\^\(\)]*)", full)
             expr = m.group(1).strip() if m else "1+1"
             return f"THOUGHT: I need to calculate this.\nACTION: calculator({expr})"
         if "date" in full or "time" in full:
@@ -128,7 +128,7 @@ class ReActAgent:
                 llm = real if real.available else MockLLM()
             else:
                 llm = MockLLM()
-                if verbose: print("No API key — using mock LLM")
+                if verbose: print("No API key - using mock LLM")
         self.llm       = llm
         self.max_steps = max_steps
         self.verbose   = verbose

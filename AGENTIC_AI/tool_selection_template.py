@@ -132,7 +132,7 @@ class ToolChain:
                 result = fn(args)
             else:
                 result = fn()
-            if verbose: print(f"    → {str(result)[:60]}")
+            if verbose: print(f"    -> {str(result)[:60]}")
         return result
 
 # ─── 5. TOOL SELECTOR (keyword-based) ────────────────────────────────────────
@@ -176,7 +176,7 @@ if __name__ == "__main__":
     print("=== Tool Registry ===")
     print(registry.describe())
 
-    print("\n=== Tool Chain: weather → convert ===")
+    print("\n=== Tool Chain: weather -> convert ===")
     chain = ToolChain(registry, logger)
     result = chain.run_chain([
         ("get_weather",   lambda _: "London"),
@@ -193,7 +193,7 @@ if __name__ == "__main__":
     queries = ["What is 2**10?", "What's the weather in Tokyo?", "Convert 100 km to miles"]
     for q in queries:
         tool = selector.select(q)
-        print(f"  '{q[:35]}' → {tool}")
+        print(f"  '{q[:35]}' -> {tool}")
 
     print("\n=== Call Log ===")
     logger.print_trace()

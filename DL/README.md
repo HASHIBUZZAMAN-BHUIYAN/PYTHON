@@ -10,6 +10,23 @@ Drop-in training loop templates for deep learning.
 | `autoencoder_template.py`           | Autoencoder for compression, denoising, anomaly detection |
 | `tiny_transformer_template.py`      | Minimal transformer block from scratch (d_model=32) |
 
+## Environment Setup
+
+This folder has its **own dedicated virtual environment** (`DL\.venv`) — separate from every other folder including BEGINNER and ADVANCED.
+
+**From a fresh terminal:**
+```
+cd C:\Users\zen\Documents\GitHub\PYTHON
+DL\.venv\Scripts\activate
+python DL\pytorch_training_loop_template.py
+```
+
+**Or:** double-click `DL\activate.bat` — it activates the venv and sets the working directory automatically.
+
+Installed packages (see `DL\requirements.txt`): numpy, matplotlib, scikit-learn, Pillow, torch (CPU), tensorflow-cpu
+
+---
+
 ## Related lessons
 - ADVANCED/week2/day08 — NN from scratch
 - ADVANCED/week2/day09 — PyTorch intro

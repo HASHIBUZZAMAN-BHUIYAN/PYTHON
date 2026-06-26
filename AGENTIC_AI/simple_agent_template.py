@@ -48,7 +48,7 @@ class FSMAgent:
             if cond(percept):
                 prev = self.state
                 self.state = next_state
-                result = action_fn(percept) if action_fn else f"{prev}→{next_state}"
+                result = action_fn(percept) if action_fn else f"{prev}->{next_state}"
                 return result
         return f"stay:{self.state}"
 
@@ -87,7 +87,7 @@ if __name__ == "__main__":
 
     for i in range(6):
         p = {"battery":max(0,90-i*15),"obstacle":i==2,"on_target":i==4}
-        print(f"  Step {i}: {p} → {agent.step(p)}")
+        print(f"  Step {i}: {p} -> {agent.step(p)}")
 
     print("\n=== FSM Agent Demo ===")
     fsm = FSMAgent("IDLE")
@@ -103,4 +103,4 @@ if __name__ == "__main__":
         {"order":None,"arrived":False,"at_base":True},
     ]
     for e in events:
-        print(f"  [{fsm.state}] {e} → {fsm.step(e)} [{fsm.state}]")
+        print(f"  [{fsm.state}] {e} -> {fsm.step(e)} [{fsm.state}]")

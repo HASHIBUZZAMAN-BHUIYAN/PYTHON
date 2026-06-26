@@ -4,6 +4,42 @@
 
 ---
 
+## Environment Setup — Read This First
+
+This repo has **8 separate virtual environments** — each folder is fully independent.
+Never mix venvs across folders; each one has only the packages that folder needs.
+
+| Folder | venv location | Key packages | Example run command |
+|--------|--------------|--------------|---------------------|
+| `BEGINNER/` | `BEGINNER\.venv` | stdlib + matplotlib + requests | `python BEGINNER\day01\lesson.py` |
+| `ADVANCED/` | `ADVANCED\.venv` | numpy, pandas, torch(cpu), tf-cpu, sklearn, opencv, nltk | `python ADVANCED\week1\day01\lesson.py` |
+| `ML/` | `ML\.venv` | numpy, pandas, scipy, scikit-learn, matplotlib | `python ML\linear_regression_template.py` |
+| `DL/` | `DL\.venv` | numpy, matplotlib, sklearn, Pillow, torch(cpu), tensorflow-cpu | `python DL\pytorch_training_loop_template.py` |
+| `CNN/` | `CNN\.venv` | numpy, matplotlib, sklearn, Pillow, opencv-python, torch(cpu), torchvision | `python CNN\road_scene_understanding.py` |
+| `NLP/` | `NLP\.venv` | numpy, sklearn, scipy, gensim, nltk, sentence-transformers, transformers, torch(cpu) | `python NLP\text_summarizer.py` |
+| `ROBOTICS/` | `ROBOTICS\.venv` | numpy, matplotlib, scipy, opencv-python | `python ROBOTICS\pathfinding_astar.py` |
+| `AGENTIC_AI/` | `AGENTIC_AI\.venv` | numpy, scikit-learn | `python AGENTIC_AI\simple_agent_template.py` |
+
+**All commands must be run from `C:\Users\zen\Documents\GitHub\PYTHON\`** (the parent folder).
+Scripts use relative paths like `CNN/outputs/` that assume this working directory.
+
+**Activating a folder's venv (example for CNN):**
+```powershell
+cd C:\Users\zen\Documents\GitHub\PYTHON
+CNN\.venv\Scripts\activate
+python CNN\road_scene_understanding.py
+```
+Or just double-click the `activate.bat` inside any of the 6 reference folders —
+it cds to the correct parent directory and activates that folder's venv automatically.
+
+**Disk space note:** The 6 reference-folder venvs together use approximately **7.3 GB**
+on disk (ROBOTICS 276 MB, AGENTIC_AI 256 MB, ML 390 MB, CNN 1.7 GB, NLP 1.8 GB,
+DL 3.1 GB). DL is the largest because tensorflow-cpu alone is ~2.8 GB. torch (~200 MB)
+is installed separately in CNN, DL, and NLP since each venv is fully independent.
+The trade-off: updating or breaking one folder's environment cannot affect any other.
+
+---
+
 ## Quick Start
 
 ```powershell
@@ -128,7 +164,7 @@ See `SETUP.md` for full setup and reinstall instructions.
 | `ML/`         | `linear_regression_template.py`, `model_evaluation_helpers.py` | ML pipelines & evaluation |
 | `DL/`         | `pytorch_training_loop_template.py`, `keras_training_loop_template.py`, `autoencoder_template.py`, `gan_template.py`, `transformer_template.py` | DL training loops + architectures |
 | `CNN/`        | `cnn_architectures_cheatsheet.py` | LeNet, VGG-mini, ResNet, MobileNet, transfer |
-| `ROBOTICS/`   | `pid_controller.py`, `pathfinding_astar.py` | PID (1D/2D/cascade), A*/BFS/Dijkstra |
+| `ROBOTICS/`   | `pid_controller.py`, `pathfinding_astar.py` + 10 animation projects | PID (1D/2D/cascade), A*/BFS/Dijkstra, potential fields, SLAM, IK, formation, ORCA |
 | `NLP/`        | `sentiment_pipeline.py`, `ner_pipeline.py`, `text_classifier.py`, `text_generator.py`, `retrieval_chatbot.py` | NLP pipelines (all CPU, offline fallbacks) |
 | `AGENTIC_AI/` | `simple_agent_template.py`, `llm_tool_calling_template.py`, `planning_agent_template.py`, `multi_agent_template.py` | Reflex/FSM/Goal agents, ReAct, multi-agent |
 

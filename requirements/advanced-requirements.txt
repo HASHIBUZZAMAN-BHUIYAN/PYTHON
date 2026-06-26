@@ -9,6 +9,7 @@ flatbuffers==25.12.19
 fonttools==4.63.0
 fsspec==2026.4.0
 gast==0.7.0
+gensim==4.4.0
 google-pasta==0.2.0
 grpcio==1.81.1
 h5py==3.14.0
@@ -41,6 +42,7 @@ python-dateutil==2.9.0.post0
 requests==2.34.2
 rich==15.0.0
 scikit-learn==1.9.0
+sentence-transformers==5.6.0
 scipy==1.17.1
 six==1.17.0
 sympy==1.14.0
@@ -48,6 +50,7 @@ tensorflow_cpu==2.21.0
 termcolor==3.3.0
 threadpoolctl==3.6.0
 torch==2.12.1+cpu
+transformers==5.12.1
 typing_extensions==4.15.0
 tzdata==2026.2
 urllib3==2.7.0

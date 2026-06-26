@@ -33,7 +33,7 @@ class Message:
         self.msg_type = msg_type
         self.timestamp= time.time()
 
-    def __repr__(self): return f"[{self.sender}→{self.receiver}] {self.content[:60]}"
+    def __repr__(self): return f"[{self.sender}->{self.receiver}] {self.content[:60]}"
 
 # ─── 1. PIPELINE ORCHESTRATOR ─────────────────────────────────────────────────
 class PipelineOrchestrator:
@@ -51,7 +51,7 @@ class PipelineOrchestrator:
             msg = Message(agent.name, "pipeline", result)
             self.log.append(msg)
             if verbose:
-                print(f"  [{agent.name}] → {result[:80]}")
+                print(f"  [{agent.name}] -> {result[:80]}")
             current = result
         return current
 
@@ -147,7 +147,7 @@ if __name__ == "__main__":
     print("=== Pipeline ===")
     def research_llm(p): return f"Research findings on '{p[:30]}': Machine learning is widely used."
     def summary_llm(p):  return f"Summary: {p[:60]}... [condensed to 2 key points]"
-    def write_llm(p):    return f"Article: {p[:50]} → This topic impacts society significantly."
+    def write_llm(p):    return f"Article: {p[:50]} -- This topic impacts society significantly."
     pipeline = PipelineOrchestrator([
         BaseAgent("Researcher", "research", research_llm),
         BaseAgent("Summarizer", "summarize", summary_llm),

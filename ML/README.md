@@ -7,6 +7,23 @@ Quick-start templates for classical machine learning.
 | `linear_regression_template.py` | Full regression pipeline with evaluation |
 | `model_evaluation_helpers.py`   | Confusion matrix, ROC, PR, cross-val helpers |
 
+## Environment Setup
+
+This folder has its **own dedicated virtual environment** (`ML\.venv`) — separate from every other folder including BEGINNER and ADVANCED.
+
+**From a fresh terminal:**
+```
+cd C:\Users\zen\Documents\GitHub\PYTHON
+ML\.venv\Scripts\activate
+python ML\linear_regression_template.py
+```
+
+**Or:** double-click `ML\activate.bat` — it activates the venv and sets the working directory automatically.
+
+Installed packages (see `ML\requirements.txt`): numpy, pandas, scipy, scikit-learn, matplotlib
+
+---
+
 ## Related lessons
 - ADVANCED/week1/day05 — Intro to ML (sklearn)
 - ADVANCED/week1/day06 — Classical ML classifiers

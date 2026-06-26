@@ -27,11 +27,11 @@ models = {
         ("scaler", StandardScaler()),
         ("reg",    LinearRegression()),
     ]),
-    "Ridge(α=1)": Pipeline([
+    "Ridge(a=1)": Pipeline([
         ("scaler", StandardScaler()),
         ("reg",    Ridge(alpha=1.0)),
     ]),
-    "Lasso(α=0.1)": Pipeline([
+    "Lasso(a=0.1)": Pipeline([
         ("scaler", StandardScaler()),
         ("reg",    Lasso(alpha=0.1, max_iter=5000)),
     ]),

@@ -24,7 +24,26 @@ Full standalone mini-projects — run with no API key required (fully offline).
 | `code_review_agent.py`        | Static rule-based code review: flags mutable defaults, bare excepts, hardcoded secrets, None comparisons, debug prints, shadowed builtins; grades A–D | `python code_review_agent.py` |
 | `negotiation_agent.py`        | Buyer and Seller agents negotiate over price using linear/exponential/cooperative concession strategies; prints full transcript and outcome | `python negotiation_agent.py` |
 
-All demo agents run in `ADVANCED\.venv`. No API key needed.
+All demo agents run in `AGENTIC_AI\.venv`. No API key needed.
+
+---
+
+## Environment Setup
+
+This folder has its **own dedicated virtual environment** (`AGENTIC_AI\.venv`) — separate from every other folder including BEGINNER and ADVANCED.
+
+**From a fresh terminal:**
+```
+cd C:\Users\zen\Documents\GitHub\PYTHON
+AGENTIC_AI\.venv\Scripts\activate
+python AGENTIC_AI\simple_agent_template.py
+```
+
+**Or:** double-click `AGENTIC_AI\activate.bat` — it activates the venv and sets the working directory automatically.
+
+Installed packages (see `AGENTIC_AI\requirements.txt`): numpy, scikit-learn
+
+Note: `llm_tool_calling_template.py` optionally uses `anthropic` (real API calls). It runs fully offline in mock mode without any API key — no need to install `anthropic`.
 
 ---
 
